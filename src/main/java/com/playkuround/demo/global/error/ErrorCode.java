@@ -15,7 +15,12 @@ public enum ErrorCode {
     ACCESS_DENIED(HttpStatus.FORBIDDEN, "C004", "권한이 없습니다."),
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "C005", "서버 내부에서 에러가 발생하였습니다."),
     BAD_REQUEST(HttpStatus.BAD_REQUEST, "C006", "Bad Request"),
-    FAIL_AUTHENTICATION(HttpStatus.UNAUTHORIZED, "C007", "인증에 실패했습니다.");
+    FAIL_AUTHENTICATION(HttpStatus.UNAUTHORIZED, "C007", "인증에 실패했습니다."),
+
+
+    // Target
+    TARGET_NOT_FOUND(HttpStatus.BAD_REQUEST, "T001", "해당 Target을 찾을 수 없습니다.");
+
 
     private final HttpStatus status;
     private final String code;

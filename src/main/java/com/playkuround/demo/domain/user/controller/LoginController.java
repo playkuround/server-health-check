@@ -36,7 +36,6 @@ public class LoginController {
         if (bindingResult.hasErrors()) {
             return "user/login";
         }
-
         boolean result = userLoginService.login(request.getToken());
         if (!result) {
             bindingResult.addError(new FieldError("loginRequest", "token", "로그인 실패"));
@@ -45,7 +44,13 @@ public class LoginController {
 
         HttpSession session = servletRequest.getSession();
         session.setAttribute(SessionConst.LOGIN_MEMBER.name(), request.getToken());
-        return "redirect:" + redirectURL;
+
+        if (redirectURL.equals("/")) {
+            return "redirect:/targets";
+        }
+        else {
+            return "redirect:" + redirectURL;
+        }
     }
 
     @GetMapping("/logout")

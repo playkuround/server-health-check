@@ -1,5 +1,6 @@
 package com.playkuround.demo.domain.user.entity;
 
+import com.playkuround.demo.domain.common.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -7,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User {
+public class User extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,4 +16,8 @@ public class User {
 
     @Column(nullable = false, unique = true)
     private String token;
+
+    public User(String token) {
+        this.token = token;
+    }
 }
