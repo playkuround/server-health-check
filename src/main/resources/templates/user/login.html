@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta th:replace="~{fragment/head :: headFrag('관리자 계정 로그인')}"/>
+    <meta th:replace="~{fragment/head :: styleFrag}"/>
+</head>
+<body class="text-center">
+<form action="" method="post" th:object="${loginRequest}" class="form">
+    <h1 class="h2 mb-3 fw-normal">로그인</h1>
+    <div class="form-floating">
+        <input minlength="5" maxlength="20" id="token" th:field="*{token}"
+               th:errorclass="field-error" class="form-control"
+               placeholder="로그인 토큰을 입력하세요.[5자리 이상, 20자리 이하]">
+        <div class="field-error" th:if="${#fields.hasErrors('token')}" th:errors="*{token}">
+            비밀번호
+        </div>
+        <label for="token">로그인 토큰</label>
+    </div>
+    <br/>
+    <button class="w-100 btn btn-primary btn-lg" type="submit">로그인하기</button>
+</form>
+</body>
+</html>
