@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta th:replace="~{fragment/head :: headFrag('도메인 상세 보기')}"/>
+    <meta th:replace="~{fragment/head :: styleFrag}"/>
+</head>
+<body class="text-center">
+
+<div class="form">
+    <h1 class="h2 mb-3 fw-normal">도메인 상태 상세 정보</h1>
+
+    <div th:object="${target}">
+        <span>도메인 : [[*{host}]]</span><br/>
+        <span>Health-check URL : [[*{healthCheckURL}]]</span><br/>
+        <span>상태 : [[*{lastStatus}]]</span><br/>
+    </div>
+    <button class="w-50 btn btn-warning btn-sm" onclick="location.href='/targets'">뒤로가기</button>
+
+    <table class="table table-striped table-hover"
+           style="white-space: nowrap; max-width: 50%; margin-left:auto; margin-right:auto;">
+        <thead>
+        <tr>
+            <th scope="col">URL</th>
+            <th scope="col">상태</th>
+            <th scope="col">확인 일시</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="result : ${results}">
+            <td th:text="${result.healthCheckURL}">URL</td>
+            <td th:text="${result.status}">status</td>
+            <td th:text="${#temporals.format(result.createdAt, 'MM-dd HH:mm:ss')}">확인 일시</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
