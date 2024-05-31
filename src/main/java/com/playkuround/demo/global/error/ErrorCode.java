@@ -19,7 +19,8 @@ public enum ErrorCode {
 
 
     // Target
-    TARGET_NOT_FOUND(HttpStatus.BAD_REQUEST, "T001", "해당 Target을 찾을 수 없습니다.");
+    TARGET_NOT_FOUND(HttpStatus.BAD_REQUEST, "T001", "해당 Target을 찾을 수 없습니다."),
+    TARGET_DUPLICATE_HOST(HttpStatus.BAD_REQUEST, "T002", "중복된 host 입니다.");
 
 
     private final HttpStatus status;

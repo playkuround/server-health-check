@@ -2,13 +2,20 @@ package com.playkuround.demo.domain.target.controller;
 
 import com.playkuround.demo.domain.result.entity.Result;
 import com.playkuround.demo.domain.result.service.ResultService;
+import com.playkuround.demo.domain.target.controller.request.AddTargetRequest;
 import com.playkuround.demo.domain.target.entity.Target;
+import com.playkuround.demo.domain.target.exception.TargetDuplicationHostException;
 import com.playkuround.demo.domain.target.service.TargetService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 
@@ -41,5 +48,28 @@ public class TargetController {
         model.addAttribute("results", results);
 
         return "target/detail";
+    }
+
+    @GetMapping("/targets/new")
+    public String addTargetForm(Model model) {
+        model.addAttribute("addTargetRequest", new AddTargetRequest());
+        return "target/addTarget";
+    }
+
+    @PostMapping("/targets/new")
+    public String addTarget(@Valid @ModelAttribute AddTargetRequest request,
+                            BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "target/addTarget";
+        }
+
+        try {
+            targetService.addTarget(request.getHost(), request.getHealthCheckURL());
+        } catch (TargetDuplicationHostException e) {
+            bindingResult.addError(new FieldError("addTargetRequest", "host", "이미 등록된 호스트입니다."));
+            return "target/addTarget";
+        }
+
+        return "complete";
     }
 }
