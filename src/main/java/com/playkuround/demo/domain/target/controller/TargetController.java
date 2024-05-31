@@ -3,6 +3,7 @@ package com.playkuround.demo.domain.target.controller;
 import com.playkuround.demo.domain.result.entity.Result;
 import com.playkuround.demo.domain.result.service.ResultService;
 import com.playkuround.demo.domain.target.controller.request.AddTargetRequest;
+import com.playkuround.demo.domain.target.controller.request.UpdateTargetRequest;
 import com.playkuround.demo.domain.target.entity.Target;
 import com.playkuround.demo.domain.target.exception.TargetDuplicationHostException;
 import com.playkuround.demo.domain.target.service.TargetService;
@@ -71,5 +72,39 @@ public class TargetController {
         }
 
         return "complete";
+    }
+
+    @GetMapping("/targets/{targetId}/update")
+    public String updateTargetFrom(@PathVariable Long targetId, Model model) {
+        Target target;
+        try {
+            target = targetService.findById(targetId);
+        } catch (Exception e) {
+            return "error/404";
+        }
+
+        UpdateTargetRequest request = new UpdateTargetRequest(target.getHost(), target.getHealthCheckURL());
+
+        model.addAttribute("targetId", target.getId());
+        model.addAttribute("updateTargetRequest", request);
+        return "target/modify";
+    }
+
+    @PostMapping("/targets/{targetId}/update")
+    public String updateTarget(@PathVariable Long targetId,
+                               @Valid @ModelAttribute UpdateTargetRequest request,
+                               BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "target/modify";
+        }
+
+        try {
+            targetService.updateTarget(targetId, request.getHost(), request.getHealthCheckURL());
+        } catch (TargetDuplicationHostException e) {
+            bindingResult.addError(new FieldError("updateTargetRequest", "host", "이미 등록된 호스트입니다."));
+            return "target/modify";
+        }
+
+        return "redirect:/targets/" + targetId;
     }
 }

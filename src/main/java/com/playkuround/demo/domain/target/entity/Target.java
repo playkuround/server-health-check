@@ -34,4 +34,9 @@ public class Target {
         this.lastStatus = status;
         this.lastCheckedAt = LocalDateTime.now();
     }
+
+    public void updateInfo(String host, String healthCheckURL) {
+        this.host = host;
+        this.healthCheckURL = healthCheckURL;
+    }
 }

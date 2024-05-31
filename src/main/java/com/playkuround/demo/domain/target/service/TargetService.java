@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -32,5 +33,19 @@ public class TargetService {
         }
         Target target = new Target(host, healthCheckURL);
         targetRepository.save(target);
+    }
+
+    @Transactional
+    public void updateTarget(Long targetId, String host, String healthCheckURL) {
+        Target target = targetRepository.findById(targetId)
+                .orElseThrow(TargetNotFoundException::new);
+
+        targetRepository.findByHost(host).ifPresent(t -> {
+            if (!Objects.equals(t.getId(), targetId)) {
+                throw new TargetDuplicationHostException();
+            }
+        });
+
+        target.updateInfo(host, healthCheckURL);
     }
 }
