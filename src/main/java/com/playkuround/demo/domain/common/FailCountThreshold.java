@@ -14,4 +14,8 @@ public abstract class FailCountThreshold {
     public static void updateThreshold(int failCount) {
         FAIL_COUNT_THRESHOLD = failCount;
     }
+
+    public static int getThreshold() {
+        return FAIL_COUNT_THRESHOLD;
+    }
 }

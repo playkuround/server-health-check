@@ -7,6 +7,7 @@ import com.playkuround.demo.domain.result.entity.Result;
 import com.playkuround.demo.domain.result.repository.ResultRepository;
 import com.playkuround.demo.domain.target.entity.Target;
 import com.playkuround.demo.domain.target.repository.TargetRepository;
+import lombok.Getter;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
@@ -23,13 +24,15 @@ import java.util.List;
 @Component
 public class DynamicScheduler {
 
+    private final EmailService emailService;
     private final TargetRepository targetRepository;
     private final ResultRepository resultRepository;
-    private final EmailService emailService;
-
-    private int ms;
-    private String cron;
     private ThreadPoolTaskScheduler scheduler;
+
+    @Getter
+    private int ms;
+    @Getter
+    private String cron;
 
     public DynamicScheduler(TargetRepository targetRepository, ResultRepository resultRepository,
                             EmailService emailService) {
@@ -86,6 +89,7 @@ public class DynamicScheduler {
                 target.updateStatus(statusCode);
                 targetRepository.save(target);
 
+                // TODO 메일 전송 로직 변경
                 if (FailCountThreshold.isThreshold(target.getConsecutiveFailCount())) {
                     errorTargets.add(target);
                 }
