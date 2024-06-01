@@ -9,4 +9,6 @@ import java.util.List;
 public interface ResultRepository extends JpaRepository<Result, Long> {
 
     List<Result> findByTargetOrderByCreatedAtDesc(Target target);
+
+    void deleteByTargetId(Long targetId);
 }

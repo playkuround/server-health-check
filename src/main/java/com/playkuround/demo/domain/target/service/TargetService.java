@@ -1,5 +1,6 @@
 package com.playkuround.demo.domain.target.service;
 
+import com.playkuround.demo.domain.result.repository.ResultRepository;
 import com.playkuround.demo.domain.target.entity.Target;
 import com.playkuround.demo.domain.target.exception.TargetDuplicationHostException;
 import com.playkuround.demo.domain.target.exception.TargetNotFoundException;
@@ -16,6 +17,7 @@ import java.util.Objects;
 public class TargetService {
 
     private final TargetRepository targetRepository;
+    private final ResultRepository resultRepository;
 
     public List<Target> findAll() {
         return targetRepository.findAll();
@@ -47,5 +49,11 @@ public class TargetService {
         });
 
         target.updateInfo(host, healthCheckURL);
+    }
+
+    @Transactional
+    public void deleteTarget(Long targetId) {
+        resultRepository.deleteByTargetId(targetId);
+        targetRepository.deleteById(targetId);
     }
 }

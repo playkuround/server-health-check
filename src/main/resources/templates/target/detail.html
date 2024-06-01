@@ -3,6 +3,40 @@
 <head>
     <meta th:replace="~{fragment/head :: headFrag('도메인 상세 보기')}"/>
     <meta th:replace="~{fragment/head :: styleFrag}"/>
+    <script>
+        function alertDialogBox() {
+            const select = confirm("해당 도메인에 관련된 모든 내용이 삭제됩니다.\n정말 삭제하시겠습니까?");
+            if (select) {
+                deleteItem();
+            } else {
+                alert("취소되었습니다.");
+            }
+        }
+
+        function deleteItem() {
+            const currentUrl = window.location.href;
+            const deleteUrl = currentUrl + '/delete';
+
+            fetch(deleteUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert('삭제되었습니다.');
+                        window.location.href = '/targets';
+                    } else {
+                        alert('삭제에 실패했습니다.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('삭제 중 에러 발생');
+                });
+        }
+    </script>
 </head>
 <body class="text-center">
 
@@ -17,6 +51,9 @@
         </button>
         <br/><br/>
         <button class="w-50 btn btn-warning btn-sm" onclick="location.href='/targets'">뒤로가기</button>
+        <br/><br/>
+        <button class="w-50 btn btn-danger btn-sm" onclick=alertDialogBox()>삭제하기
+        </button>
     </div>
 
     <table class="table table-striped table-hover"
