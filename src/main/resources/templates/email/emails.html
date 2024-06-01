@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta th:replace="~{fragment/head :: headFrag('Email')}"/>
+    <meta th:replace="~{fragment/head :: styleFrag}"/>
+    <script>
+        function addEmail() {
+            const currentUrl = window.location.href;
+            const deleteUrl = currentUrl + '/new';
+
+            // 입력된 값을 가져오기
+            const inputValue = document.getElementById('inputText').value;
+
+            fetch(deleteUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({email: inputValue})
+            })
+                .then(response => {
+                    if (response.ok) {
+                        if (confirm('이메일이 추가되었습니다.')) {
+                            window.location.href = '/emails';
+                        }
+                    } else {
+                        console.error('response', response);
+                        alert('이메일 추가 실패');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('이메일 추가 중 에러 발생');
+                });
+        }
+
+        function deleteConfirmBox(id) {
+            const select = confirm("해당 이메일이 삭제됩니다.\n정말 삭제하시겠습니까?");
+            if (select) {
+                deleteItem(id);
+            } else {
+                alert("취소되었습니다.");
+            }
+        }
+
+        function deleteItem(id) {
+            const currentUrl = window.location.href;
+            const deleteUrl = currentUrl + '/' + id + '/delete';
+
+            fetch(deleteUrl, {
+                method: 'POST',
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert('삭제되었습니다.');
+                        window.location.href = '/emails';
+                    } else {
+                        console.error('response', response);
+                        alert('삭제에 실패했습니다.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('삭제 중 에러 발생');
+                });
+        }
+    </script>
+
+</head>
+<body class="text-center">
+
+<div class="form">
+    <h1 class="h2 mb-3 fw-normal">Email</h1>
+
+    <input type="email" id="inputText" class="form-control" placeholder="추가할 이메일을 입력"/>
+    <br/>
+    <button class="w-50 btn btn-primary btn-sm" onclick=addEmail()>추가하기</button>
+    <br/><br/>
+    <button class="w-50 btn btn-warning btn-sm" onclick="location.href='/targets'">뒤로가기</button>
+    <br/><br/>
+
+    <table class="table table-striped table-hover"
+           style="white-space: nowrap; max-width: 50%; margin-left:auto; margin-right:auto;">
+        <thead>
+        <tr>
+            <th scope="col">이메일</th>
+            <th scope="col">마지막 전송 일시</th>
+            <th scope="col">삭제버튼</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="email : ${emails}">
+            <td th:text="${email.email}">이메일</td>
+            <td th:text="${#temporals.format(email.lastSendDateTime, 'MM-dd HH:mm:ss')}">마지막 전송 일시</td>
+            <td>
+                <button class="btn btn-danger btn-sm" th:emailid = "${email.id}"
+                        th:onclick="deleteConfirmBox(this.getAttribute('emailid'))">
+                    삭제
+                </button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

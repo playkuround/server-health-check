@@ -1,5 +1,7 @@
 package com.playkuround.demo.domain;
 
+import com.playkuround.demo.domain.email.entity.Email;
+import com.playkuround.demo.domain.email.repository.EmailRepository;
 import com.playkuround.demo.domain.result.entity.Result;
 import com.playkuround.demo.domain.result.repository.ResultRepository;
 import com.playkuround.demo.domain.target.entity.Target;
@@ -17,6 +19,7 @@ public class TestData {
     private final UserRepository userRepository;
     private final TargetRepository targetRepository;
     private final ResultRepository resultRepository;
+    private final EmailRepository emailRepository;
 
     @PostConstruct
     public void init() {
@@ -35,5 +38,8 @@ public class TestData {
 
         Target target3 = new Target("c.com", "c.com/health-check");
         targetRepository.save(target3);
+
+        emailRepository.save(new Email("test@naver.com"));
+        emailRepository.save(new Email("test@gmail.com"));
     }
 }
