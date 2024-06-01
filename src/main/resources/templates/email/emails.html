@@ -72,11 +72,11 @@
 <div class="form">
     <h1 class="h2 mb-3 fw-normal">Email</h1>
 
-    <input type="email" id="inputText" class="form-control" placeholder="추가할 이메일을 입력"/>
+    <input type="email" id="inputText" class="form-control" placeholder="추가할 이메일을 입력">
     <br/>
-    <button class="w-50 btn btn-primary btn-sm" onclick=addEmail()>추가하기</button>
+    <button type="button" class="w-50 btn btn-primary btn-lg" onclick=addEmail()>추가하기</button>
     <br/><br/>
-    <button class="w-50 btn btn-warning btn-sm" onclick="location.href='/targets'">뒤로가기</button>
+    <button type="button" class="w-50 btn btn-warning btn-lg" onclick="location.href='/targets'">뒤로가기</button>
     <br/><br/>
 
     <table class="table table-striped table-hover"
@@ -94,7 +94,7 @@
             <td th:text="${email.email}">이메일</td>
             <td th:text="${#temporals.format(email.lastSendDateTime, 'MM-dd HH:mm:ss')}">마지막 전송 일시</td>
             <td>
-                <button class="btn btn-danger btn-sm" th:emailid = "${email.id}"
+                <button class="btn btn-danger btn-sm" th:emailid="${email.id}"
                         th:onclick="deleteConfirmBox(this.getAttribute('emailid'))">
                     삭제
                 </button>

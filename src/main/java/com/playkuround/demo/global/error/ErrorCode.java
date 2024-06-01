@@ -23,8 +23,10 @@ public enum ErrorCode {
     TARGET_DUPLICATE_HOST(HttpStatus.BAD_REQUEST, "T002", "중복된 host 입니다."),
 
     // Email
-    EMAIL_DUPLICATE(HttpStatus.BAD_REQUEST, "E002", "중복된 이메일 입니다.");
+    EMAIL_DUPLICATE(HttpStatus.BAD_REQUEST, "E002", "중복된 이메일 입니다."),
+    EMAIL_SEND_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "E002", "이메일 전송에 실패하였습니다."),
 
+    ;
     private final HttpStatus status;
     private final String code;
     private final String message;
