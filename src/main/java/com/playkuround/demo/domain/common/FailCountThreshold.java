@@ -1,0 +1,17 @@
+package com.playkuround.demo.domain.common;
+
+public abstract class FailCountThreshold {
+
+    private static int FAIL_COUNT_THRESHOLD = 3;
+
+    private FailCountThreshold() {
+    }
+
+    public static boolean isThreshold(int failCount) {
+        return failCount == FAIL_COUNT_THRESHOLD;
+    }
+
+    public static void updateThreshold(int failCount) {
+        FAIL_COUNT_THRESHOLD = failCount;
+    }
+}

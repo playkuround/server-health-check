@@ -24,6 +24,7 @@ public class Target {
 
     private int lastStatus;
     private LocalDateTime lastCheckedAt;
+    private int consecutiveFailCount;
 
     public Target(String host, String healthCheckURL) {
         this.host = host;
@@ -33,6 +34,12 @@ public class Target {
     public void updateStatus(int status) {
         this.lastStatus = status;
         this.lastCheckedAt = LocalDateTime.now();
+        if (status / 100 == 200) {
+            this.consecutiveFailCount = 0;
+        }
+        else if (status / 100 == 400 || status / 100 == 5) {
+            this.consecutiveFailCount++;
+        }
     }
 
     public void updateInfo(String host, String healthCheckURL) {

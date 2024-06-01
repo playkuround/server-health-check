@@ -1,5 +1,6 @@
 package com.playkuround.demo.global.scheduler;
 
+import com.playkuround.demo.domain.common.FailCountThreshold;
 import com.playkuround.demo.domain.email.dto.Mail;
 import com.playkuround.demo.domain.email.service.EmailService;
 import com.playkuround.demo.domain.result.entity.Result;
@@ -8,7 +9,6 @@ import com.playkuround.demo.domain.target.entity.Target;
 import com.playkuround.demo.domain.target.repository.TargetRepository;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.Trigger;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.scheduling.support.PeriodicTrigger;
@@ -19,7 +19,6 @@ import org.springframework.web.client.RestTemplate;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 @Component
 public class DynamicScheduler {
@@ -42,19 +41,27 @@ public class DynamicScheduler {
         startScheduler();
     }
 
-    public void startScheduler() {
+    private void startScheduler() {
         scheduler = new ThreadPoolTaskScheduler();
         scheduler.setPoolSize(2);
         scheduler.initialize();
-        scheduler.schedule(getHealthCheckRunnable(), getPeriodcTrigger());
-        scheduler.schedule(getSendEmailRunnable(), getCronTrigger());
+        scheduler.schedule(getHealthCheckRunnable(), new PeriodicTrigger(Duration.ofMillis(ms)));
+        scheduler.schedule(getSendEmailRunnable(), new CronTrigger(cron));
     }
 
-    public void stopScheduler() {
+    public void updateCron(String cron) {
         scheduler.shutdown();
+        this.cron = cron;
+        startScheduler();
     }
 
-    public Runnable getHealthCheckRunnable() {
+    public void updateMillisecond(int ms) {
+        scheduler.shutdown();
+        this.ms = ms;
+        startScheduler();
+    }
+
+    private Runnable getHealthCheckRunnable() {
         return () -> {
             // TODO transactional
             List<Target> targets = targetRepository.findAll();
@@ -79,7 +86,7 @@ public class DynamicScheduler {
                 target.updateStatus(statusCode);
                 targetRepository.save(target);
 
-                if (statusCode / 100 == 4 || statusCode / 100 == 5) {
+                if (FailCountThreshold.isThreshold(target.getConsecutiveFailCount())) {
                     errorTargets.add(target);
                 }
             }
@@ -101,25 +108,10 @@ public class DynamicScheduler {
         };
     }
 
-    public Runnable getSendEmailRunnable() {
+    private Runnable getSendEmailRunnable() {
         return () -> {
 
         };
     }
 
-    private Trigger getCronTrigger() {
-        return new CronTrigger(cron);
-    }
-
-    public void updateCronSet(String cron) {
-        this.cron = cron;
-    }
-
-    private Trigger getPeriodcTrigger() {
-        return new PeriodicTrigger(ms, TimeUnit.MILLISECONDS);
-    }
-
-    public void updateMillisecondSet(int ms) {
-        this.ms = ms;
-    }
 }
