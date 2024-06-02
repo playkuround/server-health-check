@@ -13,7 +13,7 @@
     <form th:action="@{/config}" method="post">
         <div>
 
-            <div>
+            <div class="form-floating">
                 <input type="number" min="1" id="threshold" name="threshold"
                        th:errorclass="field-error" class="form-control" th:value="${threshold}"
                        placeholder="threshold">
@@ -28,8 +28,7 @@
                 <input type="number" min="10000" id="health-check-period" name="ms"
                        th:errorclass="field-error" class="form-control" th:value="${ms}"
                        placeholder="health-check period (ms)">
-                <div class="field-error text-start" th:if="${#fields.hasErrors('ms')}"
-                     th:errors="${ms}">
+                <div class="field-error text-start" th:if="${#fields.hasErrors('ms')}" th:errors="${ms}">
                     ms
                 </div>
                 <label for="health-check-period">health-check period (ms)</label>

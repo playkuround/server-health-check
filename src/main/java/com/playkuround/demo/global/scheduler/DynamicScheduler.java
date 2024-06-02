@@ -42,7 +42,7 @@ public class DynamicScheduler {
         this.cron = "0 0 23 * * ?";
         this.ms = 30000;
         startScheduler();
-        scheduler.schedule(getResetTargetSendTodayRunnable(), new CronTrigger("0 0 24 * * ?"));
+        scheduler.schedule(getResetTargetSendTodayRunnable(), new CronTrigger("0 0 0 * * ?"));
     }
 
     private void startScheduler() {
