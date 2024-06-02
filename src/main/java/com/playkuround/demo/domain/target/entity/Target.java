@@ -25,6 +25,7 @@ public class Target {
     private int lastStatus;
     private LocalDateTime lastCheckedAt;
     private int consecutiveFailCount;
+    private boolean todaySend;
 
     public Target(String host, String healthCheckURL) {
         this.host = host;
@@ -45,5 +46,9 @@ public class Target {
     public void updateInfo(String host, String healthCheckURL) {
         this.host = host;
         this.healthCheckURL = healthCheckURL;
+    }
+
+    public void setTodaySend(boolean send) {
+        this.todaySend = send;
     }
 }

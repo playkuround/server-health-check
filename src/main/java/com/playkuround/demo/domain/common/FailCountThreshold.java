@@ -7,8 +7,8 @@ public abstract class FailCountThreshold {
     private FailCountThreshold() {
     }
 
-    public static boolean isThreshold(int failCount) {
-        return failCount == FAIL_COUNT_THRESHOLD;
+    public static boolean isOverThreshold(int failCount) {
+        return failCount >= FAIL_COUNT_THRESHOLD;
     }
 
     public static void updateThreshold(int failCount) {

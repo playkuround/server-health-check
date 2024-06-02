@@ -25,21 +25,21 @@ public class TestData {
     public void init() {
         userRepository.save(new User("asdfasdf"));
 
-        Target target1 = new Target("a.com", "a.com/health-check");
+        Target target1 = new Target("a.com", "https://playkuround.com/api/system-available");
         target1.updateStatus(200);
         targetRepository.save(target1);
         resultRepository.save(new Result(target1, 500));
         resultRepository.save(new Result(target1, 201));
         resultRepository.save(new Result(target1, 200));
 
-        Target target2 = new Target("b.com", "b.com/health-check");
+        Target target2 = new Target("b.com", "https://playkuround.com/api/system-available");
         target2.updateStatus(500);
         targetRepository.save(target2);
 
-        Target target3 = new Target("c.com", "c.com/health-check");
+        Target target3 = new Target("c.com", "https://playkuround.com/api/system-available");
         targetRepository.save(target3);
 
-        emailRepository.save(new Email("test@naver.com"));
-        emailRepository.save(new Email("test@gmail.com"));
+        emailRepository.save(new Email("hsk4991149@naver.com"));
+        //emailRepository.save(new Email("test@gmail.com"));
     }
 }

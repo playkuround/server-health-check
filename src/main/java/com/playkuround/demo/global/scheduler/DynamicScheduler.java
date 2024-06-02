@@ -42,6 +42,7 @@ public class DynamicScheduler {
         this.cron = "0 0 23 * * ?";
         this.ms = 30000;
         startScheduler();
+        scheduler.schedule(getResetTargetSendTodayRunnable(), new CronTrigger("0 0 24 * * ?"));
     }
 
     private void startScheduler() {
@@ -89,8 +90,8 @@ public class DynamicScheduler {
                 target.updateStatus(statusCode);
                 targetRepository.save(target);
 
-                // TODO 메일 전송 로직 변경
-                if (FailCountThreshold.isThreshold(target.getConsecutiveFailCount())) {
+                if (FailCountThreshold.isOverThreshold(target.getConsecutiveFailCount())
+                        && !target.isTodaySend()) {
                     errorTargets.add(target);
                 }
             }
@@ -105,9 +106,11 @@ public class DynamicScheduler {
                             .append(" >> ")
                             .append(target.getHealthCheckURL())
                             .append("<br/>");
+                    target.setTodaySend(true);
                 }
                 Mail mail = new Mail(title, sb.toString());
                 emailService.sendMail(mail);
+                targetRepository.saveAll(errorTargets);
             }
         };
     }
@@ -116,6 +119,10 @@ public class DynamicScheduler {
         return () -> {
 
         };
+    }
+
+    private Runnable getResetTargetSendTodayRunnable() {
+        return targetRepository::resetSendToday;
     }
 
 }
