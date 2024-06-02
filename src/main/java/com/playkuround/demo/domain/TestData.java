@@ -10,10 +10,12 @@ import com.playkuround.demo.domain.user.entity.User;
 import com.playkuround.demo.domain.user.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+@Profile("test")
 public class TestData {
 
     private final UserRepository userRepository;
