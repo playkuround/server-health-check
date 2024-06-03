@@ -1,5 +1,6 @@
 package com.playkuround.demo.domain.target.entity;
 
+import com.playkuround.demo.domain.common.StatusCheck;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -35,10 +36,10 @@ public class Target {
     public void updateStatus(int status) {
         this.lastStatus = status;
         this.lastCheckedAt = LocalDateTime.now();
-        if (status / 100 == 200) {
+        if (StatusCheck.isOK(status)) {
             this.consecutiveFailCount = 0;
         }
-        else if (status / 100 == 400 || status / 100 == 5) {
+        else if (StatusCheck.isFail(status)) {
             this.consecutiveFailCount++;
         }
     }
