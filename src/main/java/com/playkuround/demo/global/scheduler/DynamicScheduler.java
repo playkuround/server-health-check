@@ -3,6 +3,7 @@ package com.playkuround.demo.global.scheduler;
 import com.playkuround.demo.domain.common.FailCountThreshold;
 import com.playkuround.demo.domain.email.dto.Mail;
 import com.playkuround.demo.domain.email.service.EmailService;
+import com.playkuround.demo.domain.report.service.ReportService;
 import com.playkuround.demo.domain.result.entity.Result;
 import com.playkuround.demo.domain.result.repository.ResultRepository;
 import com.playkuround.demo.domain.target.entity.Target;
@@ -27,6 +28,7 @@ public class DynamicScheduler {
     private final EmailService emailService;
     private final TargetRepository targetRepository;
     private final ResultRepository resultRepository;
+    private final ReportService reportService;
     private ThreadPoolTaskScheduler scheduler;
 
     @Getter
@@ -35,14 +37,16 @@ public class DynamicScheduler {
     private String cron;
 
     public DynamicScheduler(TargetRepository targetRepository, ResultRepository resultRepository,
-                            EmailService emailService) {
+                            ReportService reportService, EmailService emailService) {
         this.targetRepository = targetRepository;
         this.resultRepository = resultRepository;
+        this.reportService = reportService;
         this.emailService = emailService;
         this.cron = "0 0 23 * * ?";
         this.ms = 30000;
         startScheduler();
         scheduler.schedule(getResetTargetSendTodayRunnable(), new CronTrigger("0 0 0 * * ?"));
+        scheduler.schedule(getDailyReportSaveRunnable(), new CronTrigger("0 0 0 * * ?"));
     }
 
     private void startScheduler() {
@@ -123,6 +127,10 @@ public class DynamicScheduler {
 
     private Runnable getResetTargetSendTodayRunnable() {
         return targetRepository::resetSendToday;
+    }
+
+    private Runnable getDailyReportSaveRunnable() {
+        return reportService::dailySaveReport;
     }
 
 }
