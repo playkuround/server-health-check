@@ -64,15 +64,21 @@
             <th scope="col">성공 횟수</th>
             <th scope="col">실패 횟수</th>
             <th scope="col">기타 횟수</th>
+            <th scope="col">리포트 보기</th>
         </tr>
         </thead>
 
-        <tbody>
-        <tr th:each="report : ${reports}" th:onclick="|location.href='/reports/${report.id}'|">
+        <tbody th:object="${target}">
+        <tr th:each="report : ${reports}">
             <td th:text="${#temporals.format(report.date, 'yyyy-MM-dd')}">날짜</td>
             <td th:text="${report.successCount}">successCount</td>
             <td th:text="${report.failCount}">failCount</td>
             <td th:text="${report.otherCount}">otherCount</td>
+            <td>
+                <a th:href="@{/targets/{targetId}/{date}(targetId=${target.id}, date=${#temporals.format(report.date, 'yyyy-MM-dd')})}">
+                    Link
+                </a>
+            </td>
         </tr>
         </tbody>
     </table>
