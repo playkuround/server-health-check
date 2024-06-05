@@ -1,7 +1,7 @@
 package com.playkuround.demo.domain.target.controller;
 
-import com.playkuround.demo.domain.result.entity.Result;
-import com.playkuround.demo.domain.result.service.ResultService;
+import com.playkuround.demo.domain.report.entity.Report;
+import com.playkuround.demo.domain.report.service.ReportService;
 import com.playkuround.demo.domain.target.controller.request.AddTargetRequest;
 import com.playkuround.demo.domain.target.controller.request.UpdateTargetRequest;
 import com.playkuround.demo.domain.target.entity.Target;
@@ -22,7 +22,7 @@ import java.util.List;
 public class TargetController {
 
     private final TargetService targetService;
-    private final ResultService resultService;
+    private final ReportService reportService;
 
     @GetMapping("/targets")
     public String targetList(Model model) {
@@ -40,10 +40,10 @@ public class TargetController {
             return "error/404";
         }
 
-        List<Result> results = resultService.findByTargetSorted(target);
+        List<Report> reports = reportService.findByTargetSorted(target);
 
         model.addAttribute("target", target);
-        model.addAttribute("results", results);
+        model.addAttribute("reports", reports);
 
         return "target/detail";
     }

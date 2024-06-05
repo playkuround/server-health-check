@@ -60,17 +60,19 @@
            style="white-space: nowrap; max-width: 50%; margin-left:auto; margin-right:auto;">
         <thead>
         <tr>
-            <th scope="col">URL</th>
-            <th scope="col">상태</th>
-            <th scope="col">확인 일시</th>
+            <th scope="col">날짜</th>
+            <th scope="col">성공 횟수</th>
+            <th scope="col">실패 횟수</th>
+            <th scope="col">기타 횟수</th>
         </tr>
         </thead>
 
         <tbody>
-        <tr th:each="result : ${results}">
-            <td th:text="${result.healthCheckURL}">URL</td>
-            <td th:text="${result.status}">status</td>
-            <td th:text="${#temporals.format(result.createdAt, 'MM-dd HH:mm:ss')}">확인 일시</td>
+        <tr th:each="report : ${reports}" th:onclick="|location.href='/reports/${report.id}'|">
+            <td th:text="${#temporals.format(report.date, 'yyyy-MM-dd')}">날짜</td>
+            <td th:text="${report.successCount}">successCount</td>
+            <td th:text="${report.failCount}">failCount</td>
+            <td th:text="${report.otherCount}">otherCount</td>
         </tr>
         </tbody>
     </table>
