@@ -6,10 +6,10 @@ public abstract class StatusCheck {
     }
 
     public static boolean isOK(int status) {
-        return status / 100 == 200;
+        return status / 100 == 2;
     }
 
     public static boolean isFail(int status) {
-        return status / 100 == 400 || status / 100 == 5;
+        return status / 100 == 4 || status / 100 == 5;
     }
 }
