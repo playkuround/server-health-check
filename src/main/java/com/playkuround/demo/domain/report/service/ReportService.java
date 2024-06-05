@@ -23,28 +23,26 @@ public class ReportService {
     private final ResultRepository resultRepository;
 
     @Transactional
-    public void dailySaveReport() {
-        LocalDate nowDate = LocalDate.now();
-        LocalDate yesterday = nowDate.minusDays(1);
-        LocalDateTime startDateTime = nowDate
-                .minusDays(1)
-                .atStartOfDay();
-        LocalDateTime endDateTime = nowDate
-                .atStartOfDay()
-                .minusNanos(1);
-        List<Result> results = resultRepository.findByBetweenCreatedAt(startDateTime, endDateTime);
+    public void dailySaveReport(LocalDate date) {
+        LocalDateTime startDateTime = date.atStartOfDay();
+        LocalDateTime endDateTime = startDateTime.plusDays(1).minusNanos(1);
+        List<Result> results = resultRepository.findByCreatedAtBetween(startDateTime, endDateTime);
 
         Map<Target, Report> reportMap = new HashMap<>();
         for (Result result : results) {
             Target target = result.getTarget();
             Report report = reportMap.get(target);
             if (report == null) {
-                report = new Report(target, yesterday);
+                report = new Report(target, date);
                 reportMap.put(target, report);
             }
             report.addStatus(result.getStatus());
         }
 
         reportRepository.saveAll(reportMap.values());
+    }
+
+    public List<Report> findByTargetSorted(Target target) {
+        return reportRepository.findByTargetOrderByDateDesc(target);
     }
 }

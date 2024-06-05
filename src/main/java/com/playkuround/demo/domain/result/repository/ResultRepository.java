@@ -13,5 +13,5 @@ public interface ResultRepository extends JpaRepository<Result, Long> {
 
     void deleteByTargetId(Long targetId);
 
-    List<Result> findByBetweenCreatedAt(LocalDateTime start, LocalDateTime end);
+    List<Result> findByCreatedAtBetween(LocalDateTime start, LocalDateTime end);
 }

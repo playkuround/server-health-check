@@ -19,6 +19,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -130,7 +131,8 @@ public class DynamicScheduler {
     }
 
     private Runnable getDailyReportSaveRunnable() {
-        return reportService::dailySaveReport;
+        LocalDate yesterday = LocalDate.now().minusDays(1);
+        return () -> reportService.dailySaveReport(yesterday);
     }
 
 }
