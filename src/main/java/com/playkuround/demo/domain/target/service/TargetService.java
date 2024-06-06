@@ -1,5 +1,6 @@
 package com.playkuround.demo.domain.target.service;
 
+import com.playkuround.demo.domain.report.repository.ReportRepository;
 import com.playkuround.demo.domain.result.repository.ResultRepository;
 import com.playkuround.demo.domain.target.entity.Target;
 import com.playkuround.demo.domain.target.exception.TargetDuplicationHostException;
@@ -18,6 +19,7 @@ public class TargetService {
 
     private final TargetRepository targetRepository;
     private final ResultRepository resultRepository;
+    private final ReportRepository reportRepository;
 
     public List<Target> findAll() {
         return targetRepository.findAll();
@@ -53,6 +55,7 @@ public class TargetService {
 
     @Transactional
     public void deleteTarget(Long targetId) {
+        reportRepository.deleteByTargetId(targetId);
         resultRepository.deleteByTargetId(targetId);
         targetRepository.deleteById(targetId);
     }
