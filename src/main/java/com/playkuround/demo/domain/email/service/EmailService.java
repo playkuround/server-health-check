@@ -42,7 +42,7 @@ public class EmailService {
     }
 
     @Async("mailExecutor")
-    public void sendMail(Mail mail) {
+    public void sendMailAsync(Mail mail) {
         try {
             MimeMessage message = mailSender.createMimeMessage();
 

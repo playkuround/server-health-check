@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +29,11 @@ public class ReportService {
         LocalDateTime endDateTime = startDateTime.plusDays(1).minusNanos(1);
         List<Result> results = resultRepository.findByCreatedAtBetween(startDateTime, endDateTime);
 
+        Collection<Report> report = createReport(date, results);
+        reportRepository.saveAll(report);
+    }
+
+    private Collection<Report> createReport(LocalDate date, List<Result> results) {
         Map<Target, Report> reportMap = new HashMap<>();
         for (Result result : results) {
             Target target = result.getTarget();
@@ -38,8 +44,7 @@ public class ReportService {
             }
             report.addStatus(result.getStatus());
         }
-
-        reportRepository.saveAll(reportMap.values());
+        return reportMap.values();
     }
 
     public List<Report> findByTargetSorted(Target target) {
