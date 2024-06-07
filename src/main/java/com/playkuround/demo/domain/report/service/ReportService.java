@@ -24,13 +24,14 @@ public class ReportService {
     private final ResultRepository resultRepository;
 
     @Transactional
-    public void dailySaveReport(LocalDate date) {
+    public Collection<Report> dailySaveReport(LocalDate date) {
         LocalDateTime startDateTime = date.atStartOfDay();
         LocalDateTime endDateTime = startDateTime.plusDays(1).minusNanos(1);
         List<Result> results = resultRepository.findByCreatedAtBetween(startDateTime, endDateTime);
 
         Collection<Report> report = createReport(date, results);
         reportRepository.saveAll(report);
+        return report;
     }
 
     private Collection<Report> createReport(LocalDate date, List<Result> results) {

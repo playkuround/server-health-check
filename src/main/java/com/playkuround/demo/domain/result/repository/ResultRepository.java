@@ -1,6 +1,7 @@
 package com.playkuround.demo.domain.result.repository;
 
 import com.playkuround.demo.domain.result.entity.Result;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -12,6 +13,7 @@ public interface ResultRepository extends JpaRepository<Result, Long> {
 
     void deleteByTargetId(Long targetId);
 
+    @EntityGraph(attributePaths = {"target"})
     List<Result> findByCreatedAtBetween(LocalDateTime start, LocalDateTime end);
 
     @Query("SELECT r FROM Result r " +

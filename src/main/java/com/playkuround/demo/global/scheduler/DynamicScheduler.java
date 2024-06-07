@@ -1,6 +1,8 @@
 package com.playkuround.demo.global.scheduler;
 
+import com.playkuround.demo.domain.email.dto.Mail;
 import com.playkuround.demo.domain.email.service.EmailService;
+import com.playkuround.demo.domain.report.entity.Report;
 import com.playkuround.demo.domain.report.service.ReportService;
 import com.playkuround.demo.domain.result.service.ResultService;
 import com.playkuround.demo.domain.target.repository.TargetRepository;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.util.Collection;
 
 @Component
 public class DynamicScheduler {
@@ -63,7 +66,26 @@ public class DynamicScheduler {
 
     private Runnable getDailyReportSaveRunnable() {
         LocalDate yesterday = LocalDate.now().minusDays(1);
-        return () -> reportService.dailySaveReport(yesterday);
+        return () -> {
+            Collection<Report> reports = reportService.dailySaveReport(yesterday);
+
+            // TODO Template
+            String title = "Daily Report";
+            StringBuilder contentBody = new StringBuilder();
+            contentBody.append("Host, successCount, failCount, otherCount 순<br/>");
+            for (Report report : reports) {
+                contentBody.append(report.getTarget().getHost())
+                        .append(" >> ")
+                        .append(report.getSuccessCount())
+                        .append(", ")
+                        .append(report.getFailCount())
+                        .append(", ")
+                        .append(report.getOtherCount())
+                        .append("<br/>");
+            }
+            Mail mail = new Mail(title, contentBody.toString());
+            emailService.sendMailAsync(mail);
+        };
     }
 
 }
