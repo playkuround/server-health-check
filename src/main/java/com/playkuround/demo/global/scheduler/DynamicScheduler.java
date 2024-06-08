@@ -37,7 +37,7 @@ public class DynamicScheduler {
         this.reportService = reportService;
         this.emailService = emailService;
         this.ms = 30000;
-        this.cron = "0 48 14 * * ?";
+        this.cron = "0 0 0 * * ?";
         startScheduler();
     }
 
@@ -65,18 +65,18 @@ public class DynamicScheduler {
     }
 
     private Runnable getDailyReportSaveRunnable() {
-        //LocalDate yesterday = LocalDate.now().minusDays(1);
-        LocalDate yesterday = LocalDate.now();
+        LocalDate yesterday = LocalDate.now().minusDays(1);
         return () -> {
             Collection<Report> reports = reportService.dailySaveReport(yesterday);
 
             // TODO Template
             String title = "Daily Report";
             StringBuilder contentBody = new StringBuilder();
-            contentBody.append("Host, successCount, failCount, otherCount 순<br/>");
+            contentBody.append("Format : <b>{Host} >> {successCount}, {failCount}, {otherCount}</b><br/>");
             for (Report report : reports) {
-                contentBody.append(report.getTarget().getHost())
-                        .append(" >> ")
+                contentBody.append("<b>")
+                        .append(report.getTarget().getHost())
+                        .append("</b> >> ")
                         .append(report.getSuccessCount())
                         .append(", ")
                         .append(report.getFailCount())

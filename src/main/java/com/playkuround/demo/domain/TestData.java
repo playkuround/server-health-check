@@ -14,9 +14,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+
 @Component
 @RequiredArgsConstructor
-@Profile("prod")
+@Profile("local")
 public class TestData {
 
     private final UserRepository userRepository;
@@ -45,6 +47,6 @@ public class TestData {
 
         emailRepository.save(new Email("hsk4991149@naver.com"));
         //emailRepository.save(new Email("test@gmail.com"));
-        //reportService.dailySaveReport(LocalDate.now());
+        reportService.dailySaveReport(LocalDate.now());
     }
 }

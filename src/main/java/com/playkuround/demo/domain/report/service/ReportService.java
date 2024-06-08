@@ -6,7 +6,6 @@ import com.playkuround.demo.domain.result.entity.Result;
 import com.playkuround.demo.domain.result.repository.ResultRepository;
 import com.playkuround.demo.domain.target.entity.Target;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,7 +17,6 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
 public class ReportService {
 
@@ -32,12 +30,6 @@ public class ReportService {
         List<Result> results = resultRepository.findByCreatedAtBetween(startDateTime, endDateTime);
 
         Collection<Report> reports = createReport(date, results);
-        log.info("report size: {}", reports.size());
-        for (Report report : reports) {
-            log.info("report: host={}, resultSize={}",
-                    report.getTarget().getHost(),
-                    report.getSuccessCount() + report.getFailCount() + report.getOtherCount());
-        }
         reportRepository.saveAll(reports);
         return reports;
     }
