@@ -2,6 +2,7 @@ package com.playkuround.demo.domain;
 
 import com.playkuround.demo.domain.email.entity.Email;
 import com.playkuround.demo.domain.email.repository.EmailRepository;
+import com.playkuround.demo.domain.report.service.ReportService;
 import com.playkuround.demo.domain.result.entity.Result;
 import com.playkuround.demo.domain.result.repository.ResultRepository;
 import com.playkuround.demo.domain.target.entity.Target;
@@ -15,13 +16,14 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-@Profile("test")
+@Profile("prod")
 public class TestData {
 
     private final UserRepository userRepository;
     private final TargetRepository targetRepository;
     private final ResultRepository resultRepository;
     private final EmailRepository emailRepository;
+    private final ReportService reportService;
 
     @PostConstruct
     public void init() {
@@ -43,5 +45,6 @@ public class TestData {
 
         emailRepository.save(new Email("hsk4991149@naver.com"));
         //emailRepository.save(new Email("test@gmail.com"));
+        //reportService.dailySaveReport(LocalDate.now());
     }
 }

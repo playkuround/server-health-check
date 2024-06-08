@@ -37,7 +37,7 @@ public class DynamicScheduler {
         this.reportService = reportService;
         this.emailService = emailService;
         this.ms = 30000;
-        this.cron = "0 29 14 * * ?";
+        this.cron = "0 34 14 * * ?";
         startScheduler();
     }
 
