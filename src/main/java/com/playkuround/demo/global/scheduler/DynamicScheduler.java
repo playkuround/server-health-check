@@ -47,7 +47,7 @@ public class DynamicScheduler {
         scheduler.initialize();
         scheduler.schedule(getDailyReportSaveRunnable(), new CronTrigger(cron));
         scheduler.schedule(getHealthCheckRunnable(), new PeriodicTrigger(Duration.ofMillis(ms)));
-        scheduler.schedule(getResetTargetSendTodayRunnable(), new CronTrigger("0 0 0 * * ?"));
+        scheduler.schedule(getResetTargetSendTodayRunnable(), new CronTrigger("0 24 14 * * ?"));
     }
 
     public void updateMillisecond(int ms) {
