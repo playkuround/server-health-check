@@ -37,7 +37,7 @@ public class DynamicScheduler {
         this.reportService = reportService;
         this.emailService = emailService;
         this.ms = 30000;
-        this.cron = "0 0 0 * * ?";
+        this.cron = "0 29 14 * * ?";
         startScheduler();
     }
 
@@ -47,7 +47,7 @@ public class DynamicScheduler {
         scheduler.initialize();
         scheduler.schedule(getDailyReportSaveRunnable(), new CronTrigger(cron));
         scheduler.schedule(getHealthCheckRunnable(), new PeriodicTrigger(Duration.ofMillis(ms)));
-        scheduler.schedule(getResetTargetSendTodayRunnable(), new CronTrigger("0 24 14 * * ?"));
+        scheduler.schedule(getResetTargetSendTodayRunnable(), new CronTrigger("0 0 0 * * ?"));
     }
 
     public void updateMillisecond(int ms) {
@@ -65,7 +65,8 @@ public class DynamicScheduler {
     }
 
     private Runnable getDailyReportSaveRunnable() {
-        LocalDate yesterday = LocalDate.now().minusDays(1);
+        //LocalDate yesterday = LocalDate.now().minusDays(1);
+        LocalDate yesterday = LocalDate.now();
         return () -> {
             Collection<Report> reports = reportService.dailySaveReport(yesterday);
 
