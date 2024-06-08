@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Service
@@ -53,7 +54,7 @@ public class EmailService {
 
             message.setSubject(mail.title());
             message.setText(mail.content(), mail.encoding(), mail.subtype());
-            message.setFrom(new InternetAddress(mail.fromAddress(), mail.fromPersonal()));
+            message.setFrom(new InternetAddress(mail.fromAddress(), mail.fromPersonal(), StandardCharsets.UTF_8.name()));
 
             mailSender.send(message);
         } catch (MessagingException | UnsupportedEncodingException e) {
