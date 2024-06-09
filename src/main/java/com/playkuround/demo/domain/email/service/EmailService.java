@@ -44,10 +44,13 @@ public class EmailService {
 
     @Async("mailExecutor")
     public void sendMailAsync(Mail mail) {
+        List<Email> emails = emailRepository.findAll();
+        if (emails.isEmpty()) {
+            return;
+        }
+
         try {
             MimeMessage message = mailSender.createMimeMessage();
-
-            List<Email> emails = emailRepository.findAll();
             for (Email email : emails) {
                 message.addRecipients(MimeMessage.RecipientType.TO, email.getEmail());
             }
