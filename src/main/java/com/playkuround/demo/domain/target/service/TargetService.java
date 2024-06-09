@@ -59,4 +59,9 @@ public class TargetService {
         resultRepository.deleteByTargetId(targetId);
         targetRepository.deleteById(targetId);
     }
+
+    @Transactional
+    public void resetSendToday() {
+        targetRepository.resetSendToday();
+    }
 }

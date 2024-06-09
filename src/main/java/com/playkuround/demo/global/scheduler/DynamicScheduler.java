@@ -5,7 +5,7 @@ import com.playkuround.demo.domain.email.service.EmailService;
 import com.playkuround.demo.domain.report.entity.Report;
 import com.playkuround.demo.domain.report.service.ReportService;
 import com.playkuround.demo.domain.result.service.ResultService;
-import com.playkuround.demo.domain.target.repository.TargetRepository;
+import com.playkuround.demo.domain.target.service.TargetService;
 import lombok.Getter;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.scheduling.support.CronTrigger;
@@ -20,7 +20,7 @@ import java.util.Collection;
 public class DynamicScheduler {
 
     private final EmailService emailService;
-    private final TargetRepository targetRepository;
+    private final TargetService targetService;
     private final ResultService resultService;
     private final ReportService reportService;
     private ThreadPoolTaskScheduler scheduler;
@@ -30,9 +30,9 @@ public class DynamicScheduler {
     @Getter
     private String cron;
 
-    public DynamicScheduler(TargetRepository targetRepository, ResultService resultService,
+    public DynamicScheduler(TargetService targetService, ResultService resultService,
                             ReportService reportService, EmailService emailService) {
-        this.targetRepository = targetRepository;
+        this.targetService = targetService;
         this.resultService = resultService;
         this.reportService = reportService;
         this.emailService = emailService;
@@ -61,7 +61,7 @@ public class DynamicScheduler {
     }
 
     private Runnable getResetTargetSendTodayRunnable() {
-        return targetRepository::resetSendToday;
+        return targetService::resetSendToday;
     }
 
     private Runnable getDailyReportSaveRunnable() {
