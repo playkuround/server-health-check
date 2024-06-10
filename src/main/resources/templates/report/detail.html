@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
-    <meta th:replace="~{fragment/head :: headFrag('리포트 상세 보기')}"/>
+    <meta th:replace="~{fragment/head :: headFrag('Result 상세 보기')}"/>
     <meta th:replace="~{fragment/head :: styleFrag}"/>
 </head>
 <body class="text-center">
 
 <div class="form">
-    <h1 class="h2 mb-3 fw-normal">리포트 상세 보기</h1>
+    <h1 class="h2 mb-3 fw-normal">Result detail</h1>
 
     <div th:object="${status}">
         <span>success : [[*{successCount}]]</span><br/>

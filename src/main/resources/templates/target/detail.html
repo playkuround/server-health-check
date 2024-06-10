@@ -47,7 +47,15 @@
         <span>도메인 : [[*{host}]]</span><br/>
         <span>Health-check URL : [[*{healthCheckURL}]]</span><br/>
         <span>상태 : [[*{lastStatus}]]</span><br/>
-        <button class="w-50 btn btn-primary btn-sm" th:onclick="|location.href='/targets/${target.id}/update'|">수정하기
+
+        <br/>
+        <button class="w-50 btn btn-success btn-sm"
+                th:onclick="|location.href='@{/targets/{targetId}/{date}(targetId=${target.id}, date=${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd')})}'|">
+            Today's Report
+        </button>
+        <br/><br/>
+        <button class="w-50 btn btn-primary btn-sm"
+                th:onclick="|location.href='@{/targets/{targetId}/update(targetId=${target.id})}'|">수정하기
         </button>
         <br/><br/>
         <button class="w-50 btn btn-warning btn-sm" onclick="location.href='/targets'">뒤로가기</button>
@@ -64,21 +72,16 @@
             <th scope="col">성공 횟수</th>
             <th scope="col">실패 횟수</th>
             <th scope="col">기타 횟수</th>
-            <th scope="col">리포트 보기</th>
         </tr>
         </thead>
 
         <tbody th:object="${target}">
-        <tr th:each="report : ${reports}">
+        <tr th:each="report : ${reports}"
+            th:onclick="|location.href='@{/targets/{targetId}/{date}(targetId=${target.id}, date=${#temporals.format(report.date, 'yyyy-MM-dd')})}'|">
             <td th:text="${#temporals.format(report.date, 'yyyy-MM-dd')}">날짜</td>
             <td th:text="${report.successCount}">successCount</td>
             <td th:text="${report.failCount}">failCount</td>
             <td th:text="${report.otherCount}">otherCount</td>
-            <td>
-                <a th:href="@{/targets/{targetId}/{date}(targetId=${target.id}, date=${#temporals.format(report.date, 'yyyy-MM-dd')})}">
-                    Link
-                </a>
-            </td>
         </tr>
         </tbody>
     </table>
