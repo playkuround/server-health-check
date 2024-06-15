@@ -65,8 +65,8 @@ public class DynamicScheduler {
     }
 
     private Runnable getDailyReportSaveRunnable() {
-        LocalDate yesterday = LocalDate.now().minusDays(1);
         return () -> {
+            LocalDate yesterday = LocalDate.now().minusDays(1);
             Collection<Report> reports = reportService.dailySaveReport(yesterday);
 
             // TODO Template
