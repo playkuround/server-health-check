@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head></head>
+<body>
+
+<div>
+    <div style="
+            color: #000000;
+            font-size: 30px;
+            font-weight: 400;
+            font-style: normal;
+            text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.1);
+            text-transform: uppercase;
+            text-align: center;">
+        <h3>Daily Report!</h3>
+    </div>
+
+    <table style="
+            background: white;
+            border-radius: 3px;
+            border-collapse: collapse;
+            height: 150px;
+            margin: auto;
+            max-width: 600px;
+            padding: 5px;
+            width: 100%;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            animation: float 5s infinite;">
+        <thead>
+        <tr style="
+            border-top: 1px solid #C1C3D1;
+            border-bottom: 1px solid #C1C3D1;
+            color: #666B85;
+            font-size: 13px;
+            font-weight: normal;
+            text-shadow: 0 1px 1px rgba(256, 256, 256, 0.1);">
+
+            <th style="text-align: center;
+            color: #D5DDE5;;
+            background: #1b1e24;
+            border-bottom: 4px solid #9ea7af;
+            border-right: 1px solid #343a45;
+            font-size: 20px;
+            font-weight: 100;
+            padding: 15px;
+            text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+            vertical-align: middle;">Host
+            </th>
+            <th style="text-align: center;
+            color: #D5DDE5;
+            background: #1b1e24;
+            border-bottom: 4px solid #9ea7af;
+            border-right: 1px solid #343a45;
+            font-size: 20px;
+            font-weight: 100;
+            padding: 15px;
+            text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+            vertical-align: middle;">Success
+            </th>
+            <th style="text-align: center;
+            color: #D5DDE5;
+            background: #1b1e24;
+            border-bottom: 4px solid #9ea7af;
+            border-right: 1px solid #343a45;
+            font-size: 20px;
+            font-weight: 100;
+            padding: 15px;
+            text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+            vertical-align: middle;">Fail
+            </th>
+            <th style="text-align: center;
+            color: #D5DDE5;
+            background: #1b1e24;
+            border-bottom: 4px solid #9ea7af;
+            border-right: 1px solid #343a45;
+            font-size: 20px;
+            font-weight: 100;
+            padding: 15px;
+            text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+            vertical-align: middle;">Others
+            </th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="dailyReportContent : ${dailyReportContents}">
+            <td style="text-align: left;
+            background: #FFFFFF;
+            padding: 20px;
+            vertical-align: middle;
+            font-weight: 300;
+            font-size: 18px;
+            text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.1);
+            border-right: 1px solid #C1C3D1;"
+                th:text="${dailyReportContent.host()}">host
+            </td>
+            <td style="text-align: center;
+            background: #FFFFFF;
+            padding: 20px;
+            vertical-align: middle;
+            font-weight: 300;
+            font-size: 18px;
+            text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.1);
+            border-right: 1px solid #C1C3D1;"
+                th:text="${dailyReportContent.success()}">success
+            </td>
+            <td style="text-align: center;
+            background: #FFFFFF;
+            padding: 20px;
+            vertical-align: middle;
+            font-weight: 300;
+            font-size: 18px;
+            text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.1);
+            border-right: 1px solid #C1C3D1;"
+                th:text="${dailyReportContent.fail()}">fail
+            </td>
+            <td style="text-align: center;
+            background: #FFFFFF;
+            padding: 20px;
+            vertical-align: middle;
+            font-weight: 300;
+            font-size: 18px;
+            text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.1);
+            border-right: 1px solid #C1C3D1;"
+                th:text="${dailyReportContent.others()}">others
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

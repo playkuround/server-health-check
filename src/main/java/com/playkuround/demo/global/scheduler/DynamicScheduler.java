@@ -11,10 +11,13 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.scheduling.support.PeriodicTrigger;
 import org.springframework.stereotype.Component;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.List;
 
 @Component
 public class DynamicScheduler {
@@ -23,6 +26,7 @@ public class DynamicScheduler {
     private final TargetService targetService;
     private final ResultService resultService;
     private final ReportService reportService;
+    private final TemplateEngine templateEngine;
     private ThreadPoolTaskScheduler scheduler;
 
     @Getter
@@ -31,11 +35,13 @@ public class DynamicScheduler {
     private String cron;
 
     public DynamicScheduler(TargetService targetService, ResultService resultService,
-                            ReportService reportService, EmailService emailService) {
+                            ReportService reportService, EmailService emailService,
+                            TemplateEngine templateEngine) {
         this.targetService = targetService;
         this.resultService = resultService;
         this.reportService = reportService;
         this.emailService = emailService;
+        this.templateEngine = templateEngine;
         this.ms = 30000;
         this.cron = "0 0 0 * * ?";
         startScheduler();
@@ -69,22 +75,21 @@ public class DynamicScheduler {
             LocalDate yesterday = LocalDate.now().minusDays(1);
             Collection<Report> reports = reportService.dailySaveReport(yesterday);
 
-            // TODO Template
             String title = "Daily Report";
-            StringBuilder contentBody = new StringBuilder();
-            contentBody.append("Format : <b>{Host} >> {successCount}, {failCount}, {otherCount}</b><br/>");
-            for (Report report : reports) {
-                contentBody.append("<b>")
-                        .append(report.getTarget().getHost())
-                        .append("</b> >> ")
-                        .append(report.getSuccessCount())
-                        .append(", ")
-                        .append(report.getFailCount())
-                        .append(", ")
-                        .append(report.getOtherCount())
-                        .append("<br/>");
-            }
-            Mail mail = new Mail(title, contentBody.toString());
+            List<DailyReportContent> dailyReportContents = reports.stream()
+                    .map(report -> new DailyReportContent(
+                            report.getTarget().getHost(),
+                            report.getSuccessCount(),
+                            report.getFailCount(),
+                            report.getOtherCount())
+                    )
+                    .toList();
+
+            Context context = new Context();
+            context.setVariable("dailyReportContents", dailyReportContents);
+            String content = templateEngine.process("email/dailyReport-template", context);
+
+            Mail mail = new Mail(title, content);
             emailService.sendMailAsync(mail);
         };
     }
