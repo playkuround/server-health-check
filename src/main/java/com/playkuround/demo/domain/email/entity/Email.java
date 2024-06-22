@@ -6,8 +6,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -20,8 +18,6 @@ public class Email extends BaseTimeEntity {
     @jakarta.validation.constraints.Email
     @Column(nullable = false, unique = true)
     private String email;
-
-    private LocalDateTime lastSendDateTime;
 
     public Email(String email) {
         this.email = email;
