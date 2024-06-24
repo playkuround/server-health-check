@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.tuple;
 import static org.mockito.Mockito.when;
 
 @AutoConfigureMockMvc
@@ -50,9 +51,9 @@ class ReportServiceTest {
     @AfterEach
     void clean() {
         auditingHandler.setDateTimeProvider(() -> Optional.of(LocalDateTime.now()));
-        reportRepository.deleteAll();
-        resultRepository.deleteAll();
-        targetRepository.deleteAll();
+        reportRepository.deleteAllInBatch();
+        resultRepository.deleteAllInBatch();
+        targetRepository.deleteAllInBatch();
     }
 
     @Test
@@ -84,23 +85,11 @@ class ReportServiceTest {
         Collection<Report> reports = reportService.dailySaveReport(localDate);
 
         // then
-        assertThat(reports).hasSize(2);
-        for (Report report : reports) {
-            Target target = report.getTarget();
-            if (target.getId().equals(target1.getId())) {
-                assertThat(report.getSuccessCount()).isEqualTo(2);
-                assertThat(report.getFailCount()).isEqualTo(1);
-                assertThat(report.getOtherCount()).isEqualTo(1);
-            }
-            else if (target.getId().equals(target2.getId())) {
-                assertThat(report.getSuccessCount()).isEqualTo(1);
-                assertThat(report.getFailCount()).isEqualTo(0);
-                assertThat(report.getOtherCount()).isEqualTo(0);
-            }
-            else {
-                throw new IllegalArgumentException("잘못된 Target 입니다.");
-            }
-            assertThat(report.getDate()).isEqualTo(localDate);
-        }
+        assertThat(reports).hasSize(2)
+                .extracting("target.id", "date", "successCount", "failCount", "otherCount")
+                .containsExactlyInAnyOrder(
+                        tuple(target1.getId(), localDate, 2, 1, 1),
+                        tuple(target2.getId(), localDate, 1, 0, 0)
+                );
     }
 }
