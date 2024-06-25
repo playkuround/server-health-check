@@ -57,9 +57,9 @@ class TargetRepositoryTest {
         // given
         Target target1 = new Target("host1", "healthCheckURL1");
         Target target2 = new Target("host2", "healthCheckURL2");
-        target2.setTodaySend(true);
+        target2.markTodaySendEmail();
         Target target3 = new Target("host3", "healthCheckURL3");
-        target3.setTodaySend(true);
+        target3.markTodaySendEmail();
         targetRepository.saveAll(List.of(target1, target2, target3));
 
         return List.of(

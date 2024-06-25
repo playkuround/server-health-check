@@ -49,7 +49,8 @@ public class Target {
         this.healthCheckURL = healthCheckURL;
     }
 
-    public void setTodaySend(boolean send) {
-        this.todaySend = send;
+    public void markTodaySendEmail() {
+        this.todaySend = true;
     }
+
 }

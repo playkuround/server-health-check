@@ -70,7 +70,7 @@ public class ResultService {
                         .append(" >> ")
                         .append(target.getHealthCheckURL())
                         .append("<br/>");
-                target.setTodaySend(true);
+                target.markTodaySendEmail();
             }
             Mail mail = new Mail(title, contentBody.toString());
             emailService.sendMailAsync(mail);
