@@ -16,4 +16,5 @@ public interface TargetRepository extends JpaRepository<Target, Long> {
     @Modifying(clearAutomatically = true)
     @Query("update Target t set t.todaySend = false")
     void resetSendToday();
+
 }
