@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Component
 @RequiredArgsConstructor
@@ -32,14 +33,14 @@ public class TestData {
         userRepository.save(new User("asdfasdf"));
 
         Target target1 = new Target("a.com", "https://playkuround.com/api/system-available");
-        target1.updateStatus(200);
+        target1.updateStatus(200, LocalDateTime.now());
         targetRepository.save(target1);
         resultRepository.save(new Result(target1, 500));
         resultRepository.save(new Result(target1, 201));
         resultRepository.save(new Result(target1, 200));
 
         Target target2 = new Target("b.com", "https://playkuround.com/api/system-available");
-        target2.updateStatus(500);
+        target2.updateStatus(500, LocalDateTime.now());
         targetRepository.save(target2);
 
         Target target3 = new Target("c.com", "https://playkuround.com/api/system-available");

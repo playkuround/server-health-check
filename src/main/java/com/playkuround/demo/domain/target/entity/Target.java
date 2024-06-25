@@ -33,9 +33,9 @@ public class Target {
         this.healthCheckURL = healthCheckURL;
     }
 
-    public void updateStatus(int status) {
+    public void updateStatus(int status, LocalDateTime checkedAt) {
         this.lastStatus = status;
-        this.lastCheckedAt = LocalDateTime.now();
+        this.lastCheckedAt = checkedAt;
         if (StatusCheck.isOK(status)) {
             this.consecutiveFailCount = 0;
         }

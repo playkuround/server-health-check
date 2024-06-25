@@ -17,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,9 +51,10 @@ public class ResultService {
             } catch (HttpClientErrorException e) {
                 statusCode = 400;
             }
+            LocalDateTime checkedAt = LocalDateTime.now();
 
             resultRepository.save(new Result(target, statusCode));
-            target.updateStatus(statusCode);
+            target.updateStatus(statusCode, checkedAt);
 
             if (FailCountThreshold.isOverThreshold(target.getConsecutiveFailCount())
                     && !target.isTodaySend()) {
