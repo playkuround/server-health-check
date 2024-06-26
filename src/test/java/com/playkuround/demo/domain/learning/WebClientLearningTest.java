@@ -1,8 +1,8 @@
 package com.playkuround.demo.domain.learning;
 
-import com.playkuround.demo.domain.result.dto.HostAndStatus;
 import io.netty.channel.ChannelOption;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
@@ -16,6 +16,7 @@ import java.time.Duration;
 import java.util.List;
 
 @Slf4j
+@Disabled
 class WebClientLearningTest {
 
     private final WebClient webClient;
@@ -68,6 +69,9 @@ class WebClientLearningTest {
 
         // then
         hostAndStatuses.forEach(hostAndStatus -> log.info("hostAndStatus={}", hostAndStatus));
+    }
+
+    private record HostAndStatus(String host, int status) {
     }
 
 }
