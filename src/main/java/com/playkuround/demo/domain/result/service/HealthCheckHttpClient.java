@@ -1,6 +1,7 @@
 package com.playkuround.demo.domain.result.service;
 
-import com.playkuround.demo.domain.result.dto.HostAndStatus;
+import com.playkuround.demo.domain.result.dto.TargetAndStatus;
+import com.playkuround.demo.domain.target.entity.Target;
 import io.netty.channel.ChannelOption;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Component;
@@ -28,12 +29,12 @@ public class HealthCheckHttpClient {
                 .build();
     }
 
-    public List<HostAndStatus> exchangeHttp(List<String> urls) {
-        return Flux.fromIterable(urls)
-                .flatMap(url ->
-                        fetchStatusCode(url)
+    public List<TargetAndStatus> exchangeHttp(List<Target> targets) {
+        return Flux.fromIterable(targets)
+                .flatMap(target ->
+                        fetchStatusCode(target.getHealthCheckURL())
                                 .onErrorResume(this::handleNetworkErrors)
-                                .map(status -> new HostAndStatus(url, status))
+                                .map(status -> new TargetAndStatus(target, status))
                 )
                 .collectList()
                 .block();
