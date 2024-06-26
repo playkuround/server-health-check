@@ -1,5 +1,6 @@
 package com.playkuround.demo.domain.target.entity;
 
+import com.playkuround.demo.domain.common.FailCountThreshold;
 import com.playkuround.demo.domain.common.StatusCheck;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -51,6 +52,10 @@ public class Target {
 
     public void markTodaySendEmail() {
         this.todaySend = true;
+    }
+
+    public boolean isNeedToSendErrorEmail() {
+        return FailCountThreshold.isOverThreshold(consecutiveFailCount) && !todaySend;
     }
 
 }
