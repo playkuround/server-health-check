@@ -41,13 +41,10 @@ public class ReportService {
 
     private Collection<Report> createReport(LocalDate date, List<Result> results) {
         Map<Target, Report> reportMap = new HashMap<>();
+
         for (Result result : results) {
             Target target = result.getTarget();
-            Report report = reportMap.get(target);
-            if (report == null) {
-                report = new Report(target, date);
-                reportMap.put(target, report);
-            }
+            Report report = reportMap.computeIfAbsent(target, t -> new Report(t, date));
             report.addStatus(result.getStatus());
         }
         return reportMap.values();
@@ -56,4 +53,5 @@ public class ReportService {
     public List<Report> findByTargetSorted(Target target) {
         return reportRepository.findByTargetOrderByDateDesc(target);
     }
+
 }
