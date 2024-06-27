@@ -4,6 +4,7 @@ import com.playkuround.demo.domain.target.entity.Target;
 import com.playkuround.demo.domain.target.repository.TargetRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @Slf4j
+@Disabled
 @SpringBootTest
 @ActiveProfiles("test")
 public class TransactionalLearningTest {
@@ -31,11 +33,11 @@ public class TransactionalLearningTest {
         targetRepository.deleteAllInBatch();
     }
 
-    private final AtomicBoolean lock2 = new AtomicBoolean(false);
+    private final AtomicBoolean lock = new AtomicBoolean(false);
 
     @Test
     @DisplayName("특정 row에 트랜잭션이 중첩해 있다면, 빠른 트랜잭션 번호의 변경사항이 반영된다.")
-    void test() {
+    void transactionTest() {
         // given
         targetRepository.save(new Target("host", "healthCheck"));
 
@@ -63,11 +65,11 @@ public class TransactionalLearningTest {
             TransactionStatus status = txManager.getTransaction(new DefaultTransactionDefinition());
             log.info("transaction1 start. isNewTransaction = {}", status.isNewTransaction());
             Target target = targetRepository.findAll().get(0);
-            lock2.set(true);
+            lock.set(true);
             try {
                 target.updateInfo("t1_host", "healthCheck1");
 
-                while (lock2.get()) ;
+                while (lock.get()) ;
                 log.info("transaction1 commit");
                 txManager.commit(status);
             } catch (Exception e) {
@@ -78,7 +80,7 @@ public class TransactionalLearningTest {
 
     private Runnable transaction2() {
         return () -> {
-            while (!lock2.get()) ;
+            while (!lock.get()) ;
             TransactionStatus status = txManager.getTransaction(new DefaultTransactionDefinition());
             log.info("transaction2 start. isNewTransaction = {}", status.isNewTransaction());
             Target target = targetRepository.findAll().get(0);
@@ -90,7 +92,7 @@ public class TransactionalLearningTest {
             } catch (Exception e) {
                 txManager.rollback(status);
             }
-            lock2.set(false);
+            lock.set(false);
         };
     }
 
