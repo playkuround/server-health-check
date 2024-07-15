@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -50,7 +51,7 @@ class ResultServiceTest {
         Target target2 = new Target("host2", "healthCheck2");
         targetRepository.saveAll(List.of(target1, target2));
 
-        LocalDateTime checkedAt = LocalDateTime.now();
+        LocalDateTime checkedAt = LocalDateTime.now().truncatedTo(ChronoUnit.MICROS);
         List<TargetAndStatus> httpResult = List.of(
                 new TargetAndStatus(target1, 200),
                 new TargetAndStatus(target2, 500)
