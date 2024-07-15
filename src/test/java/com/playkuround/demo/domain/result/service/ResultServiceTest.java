@@ -38,8 +38,8 @@ class ResultServiceTest {
 
     @AfterEach
     void tearDown() {
-        resultRepository.deleteAll();
-        targetRepository.deleteAll();
+        resultRepository.deleteAllInBatch();
+        targetRepository.deleteAllInBatch();
     }
 
     @Test
@@ -100,6 +100,5 @@ class ResultServiceTest {
         verify(emailService, times(1))
                 .sendMailAsync(any(Mail.class));
     }
-
 
 }
