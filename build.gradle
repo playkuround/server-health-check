@@ -39,6 +39,7 @@ dependencies {
 
     // WebClient
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    runtimeOnly 'io.netty:netty-resolver-dns-native-macos'
 
     // Lombok
     annotationProcessor 'org.projectlombok:lombok'
