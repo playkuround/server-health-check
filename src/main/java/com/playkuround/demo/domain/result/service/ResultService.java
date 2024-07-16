@@ -37,7 +37,7 @@ public class ResultService {
             Target target = targetAndStatus.target();
             int status = targetAndStatus.status();
 
-            resultRepository.save(new Result(target, status));
+            resultRepository.save(new Result(target, status, checkedAt));
             target.updateStatus(status, checkedAt);
 
             if (target.isNeedToSendErrorEmail()) {

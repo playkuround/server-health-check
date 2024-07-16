@@ -14,10 +14,10 @@ public interface ResultRepository extends JpaRepository<Result, Long> {
     void deleteByTargetId(Long targetId);
 
     @EntityGraph(attributePaths = {"target"})
-    List<Result> findByCreatedAtBetween(LocalDateTime start, LocalDateTime end);
+    List<Result> findByCheckedAtBetween(LocalDateTime start, LocalDateTime end);
 
     @Query("SELECT r FROM Result r " +
-            "WHERE r.target.id = :targetId AND FUNCTION('DATE', r.createdAt) = :date " +
-            "ORDER BY r.createdAt DESC")
+            "WHERE r.target.id = :targetId AND FUNCTION('DATE', r.checkedAt) = :date " +
+            "ORDER BY r.checkedAt DESC")
     List<Result> findByTargetAndDateSorted(Long targetId, LocalDate date);
 }

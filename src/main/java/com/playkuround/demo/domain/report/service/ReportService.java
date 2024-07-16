@@ -29,7 +29,7 @@ public class ReportService {
     public Collection<Report> dailySaveReport(LocalDate date) {
         LocalDateTime startDateTime = date.atStartOfDay();
         LocalDateTime endDateTime = startDateTime.plusDays(1).minusNanos(1);
-        List<Result> results = resultRepository.findByCreatedAtBetween(startDateTime, endDateTime);
+        List<Result> results = resultRepository.findByCheckedAtBetween(startDateTime, endDateTime);
 
         Collection<Report> reports = createReport(date, results);
         reportRepository.saveAll(reports);

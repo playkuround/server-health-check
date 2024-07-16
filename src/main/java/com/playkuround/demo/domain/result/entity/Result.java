@@ -7,6 +7,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -25,9 +27,12 @@ public class Result extends BaseTimeEntity {
 
     private int status;
 
-    public Result(Target target, int status) {
+    private LocalDateTime checkedAt;
+
+    public Result(Target target, int status, LocalDateTime checkedAt) {
         this.target = target;
         this.status = status;
         this.healthCheckURL = target.getHealthCheckURL();
+        this.checkedAt = checkedAt;
     }
 }
