@@ -11,19 +11,12 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.data.auditing.AuditingHandler;
-import org.springframework.data.auditing.DateTimeProvider;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
-import static org.mockito.Mockito.when;
 
 @IntegrationTest
 class ReportServiceTest {
@@ -40,15 +33,8 @@ class ReportServiceTest {
     @Autowired
     private ResultRepository resultRepository;
 
-    @MockBean
-    private DateTimeProvider dateTimeProvider;
-
-    @SpyBean
-    private AuditingHandler auditingHandler;
-
     @AfterEach
     void clean() {
-        auditingHandler.setDateTimeProvider(() -> Optional.of(LocalDateTime.now()));
         reportRepository.deleteAllInBatch();
         resultRepository.deleteAllInBatch();
         targetRepository.deleteAllInBatch();
@@ -58,26 +44,15 @@ class ReportServiceTest {
     @DisplayName("일일 보고서 저장")
     void dailySaveReport() {
         // given
-        auditingHandler.setDateTimeProvider(dateTimeProvider);
-
         Target target1 = targetRepository.save(new Target("test1.com", "health-check1"));
         Target target2 = targetRepository.save(new Target("test2.com", "health-check2"));
 
         LocalDate localDate = LocalDate.of(2024, 6, 8);
-        when(dateTimeProvider.getNow()).thenReturn(Optional.of(localDate.atTime(0, 0, 0)));
-        resultRepository.save(new Result(target1, 200));
-
-        when(dateTimeProvider.getNow()).thenReturn(Optional.of(localDate.atTime(23, 59, 59)));
-        resultRepository.save(new Result(target1, 201));
-
-        when(dateTimeProvider.getNow()).thenReturn(Optional.of(localDate.atTime(0, 1, 0)));
-        resultRepository.save(new Result(target1, 400));
-
-        when(dateTimeProvider.getNow()).thenReturn(Optional.of(localDate.atTime(0, 2, 0)));
-        resultRepository.save(new Result(target1, 100));
-
-        when(dateTimeProvider.getNow()).thenReturn(Optional.of(localDate.atTime(0, 3, 0)));
-        resultRepository.save(new Result(target2, 200));
+        resultRepository.save(new Result(target1, 200, localDate.atTime(0, 0, 0)));
+        resultRepository.save(new Result(target1, 201, localDate.atTime(23, 59, 59)));
+        resultRepository.save(new Result(target1, 400, localDate.atTime(0, 1, 0)));
+        resultRepository.save(new Result(target1, 100, localDate.atTime(0, 2, 0)));
+        resultRepository.save(new Result(target2, 200, localDate.atTime(0, 3, 0)));
 
         // when
         Collection<Report> reports = reportService.dailySaveReport(localDate);
