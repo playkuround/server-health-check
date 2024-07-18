@@ -23,6 +23,7 @@ public class ResultService {
     private final EmailService emailService;
     private final ResultRepository resultRepository;
     private final TargetRepository targetRepository;
+    private final String errorEmailTitle = "Health Check Error";
 
     public List<Result> findByTargetAndDateSorted(Long targetId, LocalDate date) {
         return resultRepository.findByTargetAndDateSorted(targetId, date);
@@ -52,19 +53,23 @@ public class ResultService {
 
     private void sendErrorEmail(List<Target> errorTargets) {
         if (!errorTargets.isEmpty()) {
-            String title = "Health Check Error";
-            StringBuilder contentBody = new StringBuilder();
-            contentBody.append("Health Check Error<br/>");
-            for (Target target : errorTargets) {
-                contentBody.append(target.getHost())
-                        .append(" >> ")
-                        .append(target.getHealthCheckURL())
-                        .append("<br/>");
-                target.markTodaySendEmail();
-            }
-            Mail mail = new Mail(title, contentBody.toString());
+            String content = createContent(errorTargets);
+            Mail mail = new Mail(errorEmailTitle, content);
             emailService.sendMailAsync(mail);
         }
+    }
+
+    private String createContent(List<Target> errorTargets) {
+        StringBuilder contentBody = new StringBuilder();
+        contentBody.append("Health Check Error<br/>");
+        for (Target target : errorTargets) {
+            contentBody.append(target.getHost())
+                    .append(" >> ")
+                    .append(target.getHealthCheckURL())
+                    .append("<br/>");
+            target.markTodaySendEmail();
+        }
+        return contentBody.toString();
     }
 
 }
