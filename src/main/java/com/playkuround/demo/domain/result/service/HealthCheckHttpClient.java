@@ -48,9 +48,9 @@ public class HealthCheckHttpClient {
 
     private Mono<Integer> handleNetworkErrors(Throwable throwable) {
         if (throwable instanceof WebClientRequestException) {
-            return Mono.just(400);
+            return Mono.just(499);
         }
-        return Mono.just(500);
+        return Mono.just(599);
     }
 
 }
