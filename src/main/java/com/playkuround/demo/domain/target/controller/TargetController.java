@@ -10,6 +10,7 @@ import com.playkuround.demo.domain.target.controller.request.UpdateTargetRequest
 import com.playkuround.demo.domain.target.dto.StatusSummary;
 import com.playkuround.demo.domain.target.entity.Target;
 import com.playkuround.demo.domain.target.exception.TargetDuplicationHostException;
+import com.playkuround.demo.domain.target.exception.TargetNotFoundException;
 import com.playkuround.demo.domain.target.service.TargetService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +32,7 @@ public class TargetController {
     private final ReportService reportService;
     private final ResultService resultService;
 
-    @GetMapping("/targets")
+    @GetMapping({"/", "/targets"})
     public String targetList(Model model) {
         List<Target> targets = targetService.findAll();
         model.addAttribute("targets", targets);
@@ -43,7 +44,7 @@ public class TargetController {
         Target target;
         try {
             target = targetService.findById(targetId);
-        } catch (Exception e) {
+        } catch (TargetNotFoundException e) {
             return "error/404";
         }
 
@@ -108,7 +109,7 @@ public class TargetController {
         Target target;
         try {
             target = targetService.findById(targetId);
-        } catch (Exception e) {
+        } catch (TargetNotFoundException e) {
             return "error/404";
         }
 
