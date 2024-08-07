@@ -17,6 +17,7 @@ import org.thymeleaf.TemplateEngine;
 
 import java.time.Clock;
 import java.time.Duration;
+import java.util.concurrent.ScheduledFuture;
 
 @Component
 public class DynamicScheduler {
@@ -29,6 +30,7 @@ public class DynamicScheduler {
 
     private int ms;
     private final String cron;
+    private ScheduledFuture<?> healthCheckScheduledFuture;
 
     public DynamicScheduler(TargetService targetService, ResultService resultService,
                             ReportService reportService, EmailService emailService,
@@ -40,17 +42,30 @@ public class DynamicScheduler {
         this.resetTargetSendTodayRunnable = new ResetTargetSendTodayRunnable(targetService);
         this.healthCheckRunnable = new HealthCheckRunnable(clock, resultService, httpClient, targetRepository);
         this.dailyReportSaveAndSendEmailRunnable = new DailyReportSaveAndSendEmailRunnable(clock, emailService, reportService, templateEngine);
-        startScheduler();
+        this.startScheduler();
     }
 
     private void startScheduler() {
         this.scheduler = new ThreadPoolTaskScheduler();
         this.scheduler.setPoolSize(2);
         this.scheduler.initialize();
+
         this.scheduler.schedule(dailyReportSaveAndSendEmailRunnable, new CronTrigger(cron));
-        this.scheduler.schedule(healthCheckRunnable, new PeriodicTrigger(Duration.ofMillis(ms)));
         this.scheduler.schedule(resetTargetSendTodayRunnable, new CronTrigger("0 0 0 * * ?"));
+
+        this.healthCheckScheduledFuture = this.scheduler.schedule(healthCheckRunnable, new PeriodicTrigger(Duration.ofMillis(ms)));
     }
+
+    public void stopHealthCheckScheduled() {
+        if (isHealthCheckScheduled()) {
+            healthCheckScheduledFuture.cancel(true);
+        }
+    }
+
+    public boolean isHealthCheckScheduled() {
+        return healthCheckScheduledFuture != null && !healthCheckScheduledFuture.isCancelled();
+    }
+
 
     public void updateMillisecond(int ms) {
         this.scheduler.shutdown();
