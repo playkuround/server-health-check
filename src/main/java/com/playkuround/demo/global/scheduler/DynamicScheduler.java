@@ -45,7 +45,7 @@ public class DynamicScheduler {
         this.startScheduler();
     }
 
-    private void startScheduler() {
+    private synchronized void startScheduler() {
         this.scheduler = new ThreadPoolTaskScheduler();
         this.scheduler.setPoolSize(2);
         this.scheduler.initialize();
@@ -56,18 +56,28 @@ public class DynamicScheduler {
         this.healthCheckScheduledFuture = this.scheduler.schedule(healthCheckRunnable, new PeriodicTrigger(Duration.ofMillis(ms)));
     }
 
-    public void stopHealthCheckScheduled() {
-        if (isHealthCheckScheduled()) {
-            healthCheckScheduledFuture.cancel(true);
+    public synchronized void healthCheckScheduled(boolean schedule) {
+        if (schedule == isHealthCheckScheduled()) {
+            return;
+        }
+
+        if (schedule) {
+            healthCheckScheduledFuture = scheduler.schedule(healthCheckRunnable, new PeriodicTrigger(Duration.ofMillis(ms)));
+        }
+        else {
+            healthCheckScheduledFuture.cancel(false);
         }
     }
 
-    public void updateMillisecond(int ms) {
-        this.ms = ms;
+    public synchronized void updateMillisecond(int ms) {
+        if (this.ms == ms) {
+            return;
+        }
 
+        this.ms = ms;
         if (isHealthCheckScheduled()) {
-            this.healthCheckScheduledFuture.cancel(false);
-            this.healthCheckScheduledFuture = this.scheduler.schedule(healthCheckRunnable, new PeriodicTrigger(Duration.ofMillis(ms)));
+            healthCheckScheduledFuture.cancel(false);
+            healthCheckScheduledFuture = scheduler.schedule(healthCheckRunnable, new PeriodicTrigger(Duration.ofMillis(ms)));
         }
     }
 

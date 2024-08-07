@@ -17,4 +17,5 @@ public class UpdateConfigRequest {
     @Min(1)
     private int threshold;
 
+    private boolean healthCheckRun;
 }

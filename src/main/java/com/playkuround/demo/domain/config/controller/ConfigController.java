@@ -24,17 +24,17 @@ public class ConfigController {
         model.addAttribute("threshold", configInformation.failCountThreshold());
         model.addAttribute("ms", configInformation.ms());
         model.addAttribute("cron", configInformation.cron());
+        model.addAttribute("running", configInformation.isHealthCheckScheduled());
 
         return "config/config";
     }
 
     @PostMapping("/config")
-    public String updateConfig(@Valid @ModelAttribute UpdateConfigRequest request,
-                               BindingResult bindingResult) {
+    public String updateConfig(@Valid @ModelAttribute UpdateConfigRequest request, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "config/config";
         }
-        configService.updateConfig(request.getThreshold(), request.getMs());
+        configService.updateConfig(request.getThreshold(), request.getMs(), request.isHealthCheckRun());
         return "complete";
     }
 

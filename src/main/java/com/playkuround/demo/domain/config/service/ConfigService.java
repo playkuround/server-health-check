@@ -16,12 +16,14 @@ public class ConfigService {
         int schedulerMs = scheduler.getMs();
         String schedulerCron = scheduler.getCron();
         int threshold = FailCountThreshold.getThreshold();
+        boolean healthCheckScheduled = scheduler.isHealthCheckScheduled();
 
-        return new ConfigInformationDto(threshold, schedulerMs, schedulerCron);
+        return new ConfigInformationDto(threshold, schedulerMs, schedulerCron, healthCheckScheduled);
     }
 
-    public void updateConfig(int threshold, int ms) {
+    public void updateConfig(int threshold, int ms, boolean healthCheckScheduleRun) {
         FailCountThreshold.updateThreshold(threshold);
         scheduler.updateMillisecond(ms);
+        scheduler.healthCheckScheduled(healthCheckScheduleRun);
     }
 }

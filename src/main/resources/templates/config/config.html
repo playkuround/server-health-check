@@ -12,7 +12,6 @@
 
     <form th:action="@{/config}" method="post">
         <div>
-
             <div class="form-floating">
                 <input type="number" min="1" id="threshold" name="threshold"
                        th:errorclass="field-error" class="form-control" th:value="${threshold}"
@@ -41,6 +40,11 @@
                 </div>
                 <label for="email-summary-period">email summary period (cron)</label>
             </div>
+            <br/>
+
+            <input type="checkbox" id="healthCheckRun" name="healthCheckRun" th:checked="${running}">
+            <input type="hidden" name="_healthCheckRun" value="on"/>
+            <label for="healthCheckRun" class="form-check-label">Health check is RUNNING</label>
             <br/>
 
         </div>
