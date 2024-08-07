@@ -1,4 +1,4 @@
-package com.playkuround.demo.global.scheduler;
+package com.playkuround.demo.global.scheduler.runnable;
 
 import com.playkuround.demo.domain.result.dto.TargetAndStatus;
 import com.playkuround.demo.domain.result.service.HealthCheckHttpClient;

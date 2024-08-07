@@ -5,6 +5,7 @@ import com.playkuround.demo.domain.email.service.EmailService;
 import com.playkuround.demo.domain.report.entity.Report;
 import com.playkuround.demo.domain.report.service.ReportService;
 import com.playkuround.demo.domain.target.entity.Target;
+import com.playkuround.demo.global.scheduler.runnable.DailyReportSaveAndSendEmailRunnable;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;

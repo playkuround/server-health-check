@@ -1,9 +1,10 @@
-package com.playkuround.demo.global.scheduler;
+package com.playkuround.demo.global.scheduler.runnable;
 
 import com.playkuround.demo.domain.email.dto.Mail;
 import com.playkuround.demo.domain.email.service.EmailService;
 import com.playkuround.demo.domain.report.entity.Report;
 import com.playkuround.demo.domain.report.service.ReportService;
+import com.playkuround.demo.global.scheduler.DailyReportContent;
 import lombok.RequiredArgsConstructor;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;

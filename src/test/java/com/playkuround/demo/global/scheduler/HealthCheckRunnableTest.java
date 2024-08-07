@@ -5,6 +5,7 @@ import com.playkuround.demo.domain.result.service.HealthCheckHttpClient;
 import com.playkuround.demo.domain.result.service.ResultService;
 import com.playkuround.demo.domain.target.entity.Target;
 import com.playkuround.demo.domain.target.repository.TargetRepository;
+import com.playkuround.demo.global.scheduler.runnable.HealthCheckRunnable;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

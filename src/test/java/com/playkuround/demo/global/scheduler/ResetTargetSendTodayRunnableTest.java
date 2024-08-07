@@ -1,6 +1,7 @@
 package com.playkuround.demo.global.scheduler;
 
 import com.playkuround.demo.domain.target.service.TargetService;
+import com.playkuround.demo.global.scheduler.runnable.ResetTargetSendTodayRunnable;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

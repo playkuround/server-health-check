@@ -1,4 +1,4 @@
-package com.playkuround.demo.global.scheduler;
+package com.playkuround.demo.global.scheduler.runnable;
 
 import com.playkuround.demo.domain.target.service.TargetService;
 import lombok.RequiredArgsConstructor;
