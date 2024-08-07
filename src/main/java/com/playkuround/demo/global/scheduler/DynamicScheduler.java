@@ -62,15 +62,17 @@ public class DynamicScheduler {
         }
     }
 
-    public boolean isHealthCheckScheduled() {
-        return healthCheckScheduledFuture != null && !healthCheckScheduledFuture.isCancelled();
+    public void updateMillisecond(int ms) {
+        this.ms = ms;
+
+        if (isHealthCheckScheduled()) {
+            this.healthCheckScheduledFuture.cancel(false);
+            this.healthCheckScheduledFuture = this.scheduler.schedule(healthCheckRunnable, new PeriodicTrigger(Duration.ofMillis(ms)));
+        }
     }
 
-
-    public void updateMillisecond(int ms) {
-        this.scheduler.shutdown();
-        this.ms = ms;
-        startScheduler();
+    public boolean isHealthCheckScheduled() {
+        return healthCheckScheduledFuture != null && !healthCheckScheduledFuture.isCancelled();
     }
 
     public int getMs() {
