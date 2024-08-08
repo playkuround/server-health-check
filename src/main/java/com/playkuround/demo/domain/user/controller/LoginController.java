@@ -45,12 +45,7 @@ public class LoginController {
         HttpSession session = servletRequest.getSession();
         session.setAttribute(SessionConst.LOGIN_MEMBER.name(), request.getToken());
 
-        if (redirectURL.equals("/")) {
-            return "redirect:/targets";
-        }
-        else {
-            return "redirect:" + redirectURL;
-        }
+        return "redirect:" + redirectURL;
     }
 
     @GetMapping("/logout")
