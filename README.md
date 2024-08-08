@@ -1,6 +1,5 @@
 ## Intro
-웹 애플리케이션의 health-check를 확인하는 애플리케이션입니다.<br/>
-AWS의 Target-group + CloudWatch 기능의 간단한 버전입니다.<br/>
+HTTP Server의 health-check를 확인하는 애플리케이션입니다.<br/>
 health-check API 호출 주기를 설정할 수 있으며, 4xx, 5xx 응답이 연속으로 threshold 이상 누적되면 관리자의 이메일로 즉시 알립니다.<br/>
 0시 0분에 전날의 health-check 결과를 정리한 Daily report를 이메일로 받을 수 있습니다.
 
@@ -22,7 +21,7 @@ health-check API 호출 주기를 설정할 수 있으며, 4xx, 5xx 응답이 �
 
 <br/><br/>
 
-<img width="400" alt="스크린샷 2024-06-21 오후 2 04 57" src="https://github.com/playkuround/server-health-check/assets/51076814/98cf4153-4372-4b52-bd97-49913707781c"> <br/>
+<img width="400" alt="스크린샷 2024-06-21 오후 2 04 57" src="https://github.com/user-attachments/assets/74a0672b-95e4-44ba-bff9-42dc6290a164"> <br/>
 이메일 알림이 오는 연속된 에러 응답의 threshold와 health-check 주기를 변경할 수 있습니다.
 
 <br/><br/>
