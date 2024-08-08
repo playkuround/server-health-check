@@ -13,9 +13,9 @@ public class ConfigService {
     private final DynamicScheduler scheduler;
 
     public ConfigInformationDto getConfigInformation() {
+        int threshold = FailCountThreshold.getThreshold();
         int schedulerMs = scheduler.getMs();
         String schedulerCron = scheduler.getCron();
-        int threshold = FailCountThreshold.getThreshold();
         boolean healthCheckScheduled = scheduler.isHealthCheckScheduled();
 
         return new ConfigInformationDto(threshold, schedulerMs, schedulerCron, healthCheckScheduled);
