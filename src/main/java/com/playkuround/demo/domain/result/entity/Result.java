@@ -29,10 +29,21 @@ public class Result extends BaseTimeEntity {
 
     private LocalDateTime checkedAt;
 
-    public Result(Target target, int status, LocalDateTime checkedAt) {
+    private String errorLog;
+
+    private Result(Target target, int status, LocalDateTime checkedAt, String errorLog) {
         this.target = target;
         this.status = status;
         this.healthCheckURL = target.getHealthCheckURL();
         this.checkedAt = checkedAt;
+        this.errorLog = errorLog;
+    }
+
+    public static Result Success(Target target, int status, LocalDateTime checkedAt) {
+        return new Result(target, status, checkedAt, null);
+    }
+
+    public static Result Fail(Target target, int status, LocalDateTime checkedAt, String errorLog) {
+        return new Result(target, status, checkedAt, errorLog);
     }
 }
