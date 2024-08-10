@@ -1,5 +1,6 @@
 package com.playkuround.demo.domain.result.service;
 
+import com.playkuround.demo.domain.common.StatusCheck;
 import com.playkuround.demo.domain.email.dto.Mail;
 import com.playkuround.demo.domain.email.service.EmailService;
 import com.playkuround.demo.domain.result.dto.TargetAndStatus;
@@ -38,7 +39,14 @@ public class ResultService {
             Target target = targetAndStatus.target();
             int status = targetAndStatus.status();
 
-            resultRepository.save(new Result(target, status, checkedAt));
+            Result result;
+            if (StatusCheck.isOK(status)) {
+                result = Result.Success(target, status, checkedAt);
+            }
+            else {
+                result = Result.Fail(target, status, checkedAt, targetAndStatus.errorMessage());
+            }
+            resultRepository.save(result);
             target.updateStatus(status, checkedAt);
 
             if (target.isNeedToSendErrorEmail()) {
