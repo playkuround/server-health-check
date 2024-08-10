@@ -34,23 +34,27 @@ public class HealthCheckHttpClient {
                 .flatMap(target ->
                         fetchStatusCode(target.getHealthCheckURL())
                                 .onErrorResume(this::handleNetworkErrors)
-                                .map(status -> new TargetAndStatus(target, status))
+                                .map(result -> new TargetAndStatus(target, result.status, result.errorLog))
                 )
                 .collectList()
                 .block();
     }
 
-    private Mono<Integer> fetchStatusCode(String url) {
+    private Mono<StatusAndErrorLog> fetchStatusCode(String url) {
         return this.webClient.get()
                 .uri(url)
-                .exchangeToMono(response -> Mono.just(response.statusCode().value()));
+                .exchangeToMono(response ->
+                        Mono.just(new StatusAndErrorLog(response.statusCode().value(), null))
+                );
     }
 
-    private Mono<Integer> handleNetworkErrors(Throwable throwable) {
+    private Mono<StatusAndErrorLog> handleNetworkErrors(Throwable throwable) {
         if (throwable instanceof WebClientRequestException) {
-            return Mono.just(499);
+            return Mono.just(new StatusAndErrorLog(499, throwable.getMessage()));
         }
-        return Mono.just(599);
+        return Mono.just(new StatusAndErrorLog(599, throwable.getMessage()));
     }
 
+    private record StatusAndErrorLog(int status, String errorLog) {
+    }
 }
