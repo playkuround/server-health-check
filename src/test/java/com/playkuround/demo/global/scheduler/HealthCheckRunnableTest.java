@@ -31,8 +31,8 @@ class HealthCheckRunnableTest {
         when(targetRepository.findAll()).thenReturn(targets);
 
         List<TargetAndStatus> httpResult = List.of(
-                new TargetAndStatus(targets.get(0), 200),
-                new TargetAndStatus(targets.get(1), 500)
+                new TargetAndStatus(targets.get(0), 200, null),
+                new TargetAndStatus(targets.get(1), 500, "timeout")
         );
         HealthCheckHttpClient httpClient = mock(HealthCheckHttpClient.class);
         when(httpClient.exchangeHttp(targets)).thenReturn(httpResult);

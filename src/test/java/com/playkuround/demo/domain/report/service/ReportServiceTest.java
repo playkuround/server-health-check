@@ -48,11 +48,11 @@ class ReportServiceTest {
         Target target2 = targetRepository.save(new Target("test2.com", "health-check2"));
 
         LocalDate localDate = LocalDate.of(2024, 6, 8);
-        resultRepository.save(new Result(target1, 200, localDate.atTime(0, 0, 0)));
-        resultRepository.save(new Result(target1, 201, localDate.atTime(23, 59, 59)));
-        resultRepository.save(new Result(target1, 400, localDate.atTime(0, 1, 0)));
-        resultRepository.save(new Result(target1, 100, localDate.atTime(0, 2, 0)));
-        resultRepository.save(new Result(target2, 200, localDate.atTime(0, 3, 0)));
+        resultRepository.save(Result.Success(target1, 200, localDate.atTime(0, 0, 0)));
+        resultRepository.save(Result.Success(target1, 201, localDate.atTime(23, 59, 59)));
+        resultRepository.save(Result.Fail(target1, 400, localDate.atTime(0, 1, 0), "error"));
+        resultRepository.save(Result.Success(target1, 100, localDate.atTime(0, 2, 0)));
+        resultRepository.save(Result.Success(target2, 200, localDate.atTime(0, 3, 0)));
 
         // when
         Collection<Report> reports = reportService.dailySaveReport(localDate);

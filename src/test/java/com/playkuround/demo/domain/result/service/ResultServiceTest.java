@@ -53,8 +53,8 @@ class ResultServiceTest {
 
         LocalDateTime checkedAt = LocalDateTime.now().truncatedTo(ChronoUnit.MICROS);
         List<TargetAndStatus> httpResult = List.of(
-                new TargetAndStatus(target1, 200),
-                new TargetAndStatus(target2, 500)
+                new TargetAndStatus(target1, 200, null),
+                new TargetAndStatus(target2, 500, "timeout")
         );
 
         // when
@@ -87,7 +87,7 @@ class ResultServiceTest {
         targetRepository.save(target);
 
         LocalDateTime checkedAt = LocalDateTime.now();
-        List<TargetAndStatus> httpResult = List.of(new TargetAndStatus(target, 400));
+        List<TargetAndStatus> httpResult = List.of(new TargetAndStatus(target, 400, "timeout"));
 
         // when
         resultService.organizeHealthCheckResult(httpResult, checkedAt);
