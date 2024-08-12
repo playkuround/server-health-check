@@ -24,6 +24,7 @@
             <th scope="col">URL</th>
             <th scope="col">상태</th>
             <th scope="col">확인 일시</th>
+            <th scope="col">Error Log</th>
         </tr>
         </thead>
 
@@ -32,6 +33,7 @@
             <td th:text="${result.healthCheckURL}">URL</td>
             <td th:text="${result.status}">status</td>
             <td th:text="${#temporals.format(result.createdAt, 'MM-dd HH:mm:ss')}">확인 일시</td>
+            <td th:text="${result.errorLog}">Error log</td>
         </tr>
         </tbody>
     </table>

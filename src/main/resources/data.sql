@@ -17,20 +17,25 @@ insert into target(host, health_checkurl, last_status, last_checked_at, consecut
 values ('c.com', 'https://playkuround.com/api/system-available', 100, DATEADD('DAY', -1, NOW()), 0, false);
 
 -- RESULT
-insert into result(target_id, health_checkurl, status, created_at)
-values (1, 'https://playkuround.com/api/system-available', 500, DATEADD('DAY', -1, NOW()));
+insert into result(target_id, health_checkurl, status, created_at, checked_at, error_log)
+values (1, 'https://playkuround.com/api/system-available', 500, DATEADD('DAY', -1, NOW()), DATEADD('DAY', -1, NOW()),
+        'server error');
 
-insert into result(target_id, health_checkurl, status, created_at)
-values (1, 'https://playkuround.com/api/system-available', 201, DATEADD('DAY', -1, NOW()));
+insert into result(target_id, health_checkurl, status, created_at, checked_at, error_log)
+values (1, 'https://playkuround.com/api/system-available', 201, DATEADD('DAY', -1, NOW()), DATEADD('DAY', -1, NOW()),
+        null);
 
-insert into result(target_id, health_checkurl, status, created_at)
-values (1, 'https://playkuround.com/api/system-available', 200, DATEADD('DAY', -1, NOW()));
+insert into result(target_id, health_checkurl, status, created_at, checked_at, error_log)
+values (1, 'https://playkuround.com/api/system-available', 200, DATEADD('DAY', -1, NOW()), DATEADD('DAY', -1, NOW()),
+        null);
 
-insert into result(target_id, health_checkurl, status, created_at)
-values (2, 'https://playkuround.com/api/system-available', 500, DATEADD('DAY', -1, NOW()));
+insert into result(target_id, health_checkurl, status, created_at, checked_at, error_log)
+values (2, 'https://playkuround.com/api/system-available', 500, DATEADD('DAY', -1, NOW()), DATEADD('DAY', -1, NOW()),
+        'server error');
 
-insert into result(target_id, health_checkurl, status, created_at)
-values (3, 'https://playkuround.com/api/system-available', 100, DATEADD('DAY', -1, NOW()));
+insert into result(target_id, health_checkurl, status, created_at, checked_at, error_log)
+values (3, 'https://playkuround.com/api/system-available', 100, DATEADD('DAY', -1, NOW()), DATEADD('DAY', -1, NOW()),
+        null);
 
 -- REPORT
 insert into report(target_id, date, success_count, fail_count, other_count)
