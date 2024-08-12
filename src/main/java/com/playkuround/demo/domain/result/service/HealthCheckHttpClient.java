@@ -3,6 +3,7 @@ package com.playkuround.demo.domain.result.service;
 import com.playkuround.demo.domain.result.dto.TargetAndStatus;
 import com.playkuround.demo.domain.target.entity.Target;
 import io.netty.channel.ChannelOption;
+import io.netty.resolver.DefaultAddressResolverGroup;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -22,7 +23,8 @@ public class HealthCheckHttpClient {
     public HealthCheckHttpClient() {
         HttpClient httpClient = HttpClient.create()
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 5000)
-                .responseTimeout(Duration.ofMillis(3000));
+                .responseTimeout(Duration.ofMillis(3000))
+                .resolver(DefaultAddressResolverGroup.INSTANCE);
 
         this.webClient = WebClient.builder()
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
