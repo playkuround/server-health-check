@@ -11,6 +11,7 @@ import org.springframework.web.reactive.function.client.WebClientRequestExceptio
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.netty.http.client.HttpClient;
+import reactor.netty.resources.ConnectionProvider;
 
 import java.time.Duration;
 import java.util.List;
@@ -21,7 +22,11 @@ public class HealthCheckHttpClient {
     private final WebClient webClient;
 
     public HealthCheckHttpClient() {
-        HttpClient httpClient = HttpClient.create()
+        ConnectionProvider provider = ConnectionProvider.builder("custom")
+                .maxIdleTime(Duration.ofSeconds(20))
+                .build();
+
+        HttpClient httpClient = HttpClient.create(provider)
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 5000)
                 .responseTimeout(Duration.ofMillis(3000))
                 .resolver(DefaultAddressResolverGroup.INSTANCE);
